@@ -8,6 +8,10 @@ const __dirname = path.dirname(__filename)
 
 const app = express()
 
+// Middleware
+app.use(express.json())
+app.use(express.static(path.join(__dirname, '..', 'public')))
+
 // Home route - HTML
 app.get('/', (req, res) => {
   res.type('html').send(`
