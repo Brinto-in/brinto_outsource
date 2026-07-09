@@ -1,3 +1,4 @@
+import axios from 'axios'
 import express from 'express'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -43,6 +44,30 @@ app.get('/api-data', (req, res) => {
     items: ['apple', 'banana', 'cherry'],
   })
 })
+
+/**
+ * ✅ Get SAMS Cutoff Marks
+ * POST /api/config/sams-cutoff-deg
+ */
+app.post("/sams-cutoff-deg",async (req, res) => {
+    try {
+        const { tkn, dist, colg, acyear, SelectionType } = req.body;
+        const response = await axios.post("https://degree.samsodisha.gov.in/HSS/SAMSWebService.asmx/GetCutOffMarksDeg", {
+            tkn,
+            dist,
+            colg,
+            acyear,
+            SelectionType
+        });
+        res.json(response.data);
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch cutoff marks",
+            error: error.message
+        });
+    }
+});
 
 // Health check
 app.get('/healthz', (req, res) => {
