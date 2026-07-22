@@ -12,6 +12,14 @@ const router = Router();
 router.get('/details', verifyToken, async (req: AuthRequest, res) => {
   try {
     const { user_id, user_name } = req.user!;
+    res.json({
+      success: true,
+      data: {
+        user_id,
+        user_name,
+        // ...result.rows[0],
+      },
+    });
 
     // Query user details from database
     const result = await db.execute({
@@ -48,29 +56,29 @@ router.get('/details', verifyToken, async (req: AuthRequest, res) => {
  * PUT /api/user/profile
  * Requires: Authorization: Bearer <token>
  */
-router.put('/profile', verifyToken, async (req: AuthRequest, res) => {
-  try {
-    const { user_id } = req.user!;
-    const { name, email, phone } = req.body;
+// router.put('/profile', verifyToken, async (req: AuthRequest, res) => {
+//   try {
+//     const { user_id } = req.user!;
+//     const { name, email, phone } = req.body;
 
-    // Update user in database
-    const result = await db.execute({
-      sql: 'UPDATE users SET name = ?, email = ?, phone = ? WHERE id = ?',
-      args: [name, email, phone, user_id],
-    });
+//     // Update user in database
+//     const result = await db.execute({
+//       sql: 'UPDATE users SET name = ?, email = ?, phone = ? WHERE id = ?',
+//       args: [name, email, phone, user_id],
+//     });
 
-    res.json({
-      success: true,
-      message: 'User profile updated',
-      data: result,
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: 'Failed to update user profile',
-      error: error.message,
-    });
-  }
-});
+//     res.json({
+//       success: true,
+//       message: 'User profile updated',
+//       data: result,
+//     });
+//   } catch (error: any) {
+//     res.status(500).json({
+//       success: false,
+//       message: 'Failed to update user profile',
+//       error: error.message,
+//     });
+//   }
+// });
 
 export default router;
