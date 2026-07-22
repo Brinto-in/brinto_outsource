@@ -11,9 +11,11 @@
     "@types/express": "^5.0.0",
     "axios": "^1.18.1",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.3",
     "request": "^2.88.2"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.0.0"
   }
 }

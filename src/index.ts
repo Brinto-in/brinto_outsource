@@ -3,6 +3,7 @@ import express from 'express'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import dbRoutes from './routes/db-example.js'
+import userRoutes from './routes/user.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -15,6 +16,8 @@ app.use(express.static(path.join(__dirname, '..', 'public')))
 
 // Database routes
 app.use('/api', dbRoutes)
+// User routes
+app.use('/api/user', userRoutes)
 
 // Home route - HTML
 app.get('/', (req, res) => {
