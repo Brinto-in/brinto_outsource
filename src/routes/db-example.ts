@@ -56,4 +56,26 @@ router.post("/users", async (req, res) => {
   }
 });
 
+/**
+ * Get top 6 tests ordered by attempts (descending)
+ * GET /api/tests
+ */
+router.get("/tests", async (req, res) => {
+  try {
+    const result = await db.execute(
+      "SELECT * FROM tests ORDER BY attempts DESC LIMIT 6"
+    );
+    res.json({
+      success: true,
+      data: result.rows,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch tests",
+      error: error.message,
+    });
+  }
+});
+
 export default router;
