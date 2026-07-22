@@ -2,6 +2,7 @@ import axios from 'axios'
 import express from 'express'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import dbRoutes from './routes/db-example.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -11,6 +12,9 @@ const app = express()
 // Middleware
 app.use(express.json())
 app.use(express.static(path.join(__dirname, '..', 'public')))
+
+// Database routes
+app.use('/api', dbRoutes)
 
 // Home route - HTML
 app.get('/', (req, res) => {
