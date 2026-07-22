@@ -22,26 +22,26 @@ router.get('/details', verifyToken, async (req: AuthRequest, res) => {
     });
 
     // Query user details from database
-    const result = await db.execute({
-      sql: 'SELECT * FROM users WHERE id = ?',
-      args: [user_id],
-    });
+    // const result = await db.execute({
+    //   sql: 'SELECT * FROM users WHERE id = ?',
+    //   args: [user_id],
+    // });
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: 'User not found',
-      });
-    }
+    // if (result.rows.length === 0) {
+    //   return res.status(404).json({
+    //     success: false,
+    //     message: 'User not found',
+    //   });
+    // }
 
-    res.json({
-      success: true,
-      data: {
-        user_id,
-        user_name,
-        ...result.rows[0],
-      },
-    });
+    // res.json({
+    //   success: true,
+    //   data: {
+    //     user_id,
+    //     user_name,
+    //     ...result.rows[0],
+    //   },
+    // });
   } catch (error: any) {
     res.status(500).json({
       success: false,
