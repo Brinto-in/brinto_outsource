@@ -4,6 +4,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import dbRoutes from './routes/db-example.js'
 import userRoutes from './routes/user.js'
+import anganwadiRoutes from './routes/anganwadi_routes.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -18,6 +19,8 @@ app.use(express.static(path.join(__dirname, '..', 'public')))
 app.use('/api', dbRoutes)
 // User routes
 app.use('/api/user', userRoutes)
+// Anganwadi routes
+app.use('/api', anganwadiRoutes)
 
 // Home route - HTML
 app.get('/', (req, res) => {
@@ -56,50 +59,28 @@ app.get('/api-data', (req, res) => {
   })
 })
 
-app.get('/api/anganwadi', (req, res) => {
-  res.json([
-    {
-      slNo: '1',
-      anganwadiCenterName: 'GHOSAR -A',
-      district: 'ANGUL',
-      ruralUrbanProject: 'KISHORENAGAR',
-      area: 'GHOSAR : HOUSE NO-1 JAI SAHU to HOUSE NO- 228 ASHOK KUMAR MISHRA PADIABANDHU PALI : HOUSE NO-1 JAI SAHU to HOUSE NO- 228 ASHOK KUMAR MISHRA KISHORECHANDRAPUR : HOUSE NO-1 JAI SAHU to HOUSE NO- 228 ASHOK KUMAR MISHRA',
-      vacantPositions: '1',
-      startDate: '16/07/2026',
-      endDate: '30/07/2026',
-      canApply: true,
-      awwEventId: '32898',
-      applyUrl: 'https://engagement-awc.odisha.gov.in/applyForAwwRecruitmentFromOutside.htm?awwEventId=32898',
-      viewDocumentsUrl: 'https://engagement-awc.odisha.gov.in/viewAwwEventDocumentOutside.htm?awwEventId=32898',
-      tab: 'Active',
-      searchedDistrict: 'ANGUL',
-      forValue: 'W',
-    },
-  ])
-})
-
 /**
  * ✅ Get SAMS Cutoff Marks
  * POST /api/config/sams-cutoff-deg
  */
-app.post("/sams-cutoff-deg",async (req, res) => {
-    try {
-        const { tkn, dist, colg, acyear, SelectionType } = req.body;
-        const response = await axios.post("https://degree.samsodisha.gov.in/HSS/SAMSWebService.asmx/GetCutOffMarksDeg", {
-            tkn,
-            dist,
-            colg,
-            acyear,
-            SelectionType
-        });
-        res.json(response.data);
-    } catch (error: any) {
-        res.status(500).json({
-            success: false,
-            message: "Failed to fetch cutoff marks",
-            error: error.message
-        });
-    }
+app.post("/sams-cutoff-deg", async (req, res) => {
+  try {
+    const { tkn, dist, colg, acyear, SelectionType } = req.body;
+    const response = await axios.post("https://degree.samsodisha.gov.in/HSS/SAMSWebService.asmx/GetCutOffMarksDeg", {
+      tkn,
+      dist,
+      colg,
+      acyear,
+      SelectionType
+    });
+    res.json(response.data);
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch cutoff marks",
+      error: error.message
+    });
+  }
 });
 
 // Health check
