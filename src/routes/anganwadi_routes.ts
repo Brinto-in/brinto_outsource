@@ -23,9 +23,9 @@ interface AnganwadiCenter {
 
 router.get('/anganwadi', async (req, res) => {
     try {
-        // Fetch all records from the anganwadi_centers table
+        // Fetch all records from the anganwadi_recruitments table
         const result = await db.execute({
-            sql: 'SELECT * FROM anganwadi_centers',
+            sql: 'SELECT * FROM anganwadi_recruitments',
             args: [],
         })
 
@@ -67,7 +67,7 @@ router.post('/anganwadi', async (req, res) => {
         // The database insertion logic is commented out, similar to user.ts.
         // You can uncomment and adapt it once your 'anganwadi_centers' table is ready.
         const result = await db.execute({
-            sql: 'INSERT INTO anganwadi_centers (anganwadiCenterName, district, ruralUrbanProject, area, vacantPositions, startDate, endDate, canApply, awwEventId, applyUrl, viewDocumentsUrl, tab, searchedDistrict, forValue) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            sql: 'INSERT INTO anganwadi_recruitments (anganwadiCenterName, district, ruralUrbanProject, area, vacantPositions, startDate, endDate, canApply, awwEventId, applyUrl, viewDocumentsUrl, tab, searchedDistrict, forValue) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             args: [anganwadiCenterName, district, ruralUrbanProject, area, vacantPositions, startDate, endDate, canApply, awwEventId, applyUrl, viewDocumentsUrl, tab, searchedDistrict, forValue],
         });
 
