@@ -5,6 +5,7 @@ const router = Router()
 
 interface AnganwadiCenter {
     slNo: string
+    state: string
     anganwadiCenterName: string
     district: string
     ruralUrbanProject: string
@@ -47,6 +48,7 @@ router.post('/anganwadi', async (req, res) => {
     try {
         const {
             slNo,
+            state,
             anganwadiCenterName,
             district,
             ruralUrbanProject,
@@ -68,8 +70,8 @@ router.post('/anganwadi', async (req, res) => {
         // The database insertion logic is commented out, similar to user.ts.
         // You can uncomment and adapt it once your 'anganwadi_centers' table is ready.
         const result = await db.execute({
-            sql: 'INSERT INTO anganwadi_recruitments (sl_no, anganwadi_center_name, district, rural_urban_project, area, vacant_positions, start_date, end_date, can_apply, aww_event_id, apply_url, view_documents_url, tab, searched_district, for_value) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            args: [slNo, anganwadiCenterName, district, ruralUrbanProject, area, vacantPositions, startDate, endDate, canApply, awwEventId, applyUrl, viewDocumentsUrl, tab, searchedDistrict, forValue],
+            sql: 'INSERT INTO anganwadi_recruitments (sl_no, state, anganwadi_center_name, district, rural_urban_project, area, vacant_positions, start_date, end_date, can_apply, aww_event_id, apply_url, view_documents_url, tab, searched_district, for_value) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            args: [slNo, state, anganwadiCenterName, district, ruralUrbanProject, area, vacantPositions, startDate, endDate, canApply, awwEventId, applyUrl, viewDocumentsUrl, tab, searchedDistrict, forValue],
         });
 
         res.status(201).json({
