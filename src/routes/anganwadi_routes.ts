@@ -26,6 +26,7 @@ router.get('/anganwadi', async (req, res) => {
     try {
         const state = typeof req.query.state === 'string' ? req.query.state : undefined
         const district = typeof req.query.district === 'string' ? req.query.district : undefined
+        const forValue = typeof req.query.for_value === 'string' ? req.query.for_value : undefined
 
         let sql = 'SELECT * FROM anganwadi_recruitments'
         const conditions: string[] = []
@@ -39,6 +40,11 @@ router.get('/anganwadi', async (req, res) => {
         if (district) {
             conditions.push("LOWER(TRIM(COALESCE(district, ''))) = LOWER(TRIM(?))")
             args.push(district)
+        }
+
+        if (forValue) {
+            conditions.push("LOWER(TRIM(COALESCE(for_value, ''))) = LOWER(TRIM(?))")
+            args.push(forValue)
         }
 
         if (conditions.length > 0) {
