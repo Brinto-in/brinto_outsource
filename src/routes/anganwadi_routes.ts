@@ -43,8 +43,21 @@ router.get('/anganwadi', async (req, res) => {
         }
 
         if (forValue) {
-            conditions.push("LOWER(TRIM(COALESCE(for_value, ''))) = LOWER(TRIM(?))")
-            args.push(forValue)
+            const normalizedForValue = forValue.toLowerCase()
+            const forValueValues = normalizedForValue === 'aww' || normalizedForValue === 'w'
+                ? ['w']
+                : normalizedForValue === 'awh' || normalizedForValue === 'h'
+                    ? ['h']
+                    : [normalizedForValue]
+
+            if (forValueValues.length > 1) {
+                const placeholders = forValueValues.map(() => '?').join(', ')
+                conditions.push(`LOWER(TRIM(COALESCE(for_value, ''))) IN (${placeholders})`)
+                args.push(...forValueValues)
+            } else {
+                conditions.push("LOWER(TRIM(COALESCE(for_value, ''))) = LOWER(TRIM(?))")
+                args.push(forValueValues[0])
+            }
         }
 
         if (conditions.length > 0) {
