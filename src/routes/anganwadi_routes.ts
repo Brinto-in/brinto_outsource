@@ -23,9 +23,9 @@ interface AnganwadiCenter {
 
 router.get('/anganwadi', async (req, res) => {
     try {
-        // Fetch all records from the anganwadi_recruitments table
+        // Fetch all records from the anganwadi_centers table
         const result = await db.execute({
-            sql: 'SELECT * FROM anganwadi_recruitments',
+            sql: 'SELECT * FROM anganwadi_centers',
             args: [],
         })
 
@@ -46,6 +46,7 @@ router.get('/anganwadi', async (req, res) => {
 router.post('/anganwadi', async (req, res) => {
     try {
         const {
+            slNo,
             anganwadiCenterName,
             district,
             ruralUrbanProject,
@@ -60,22 +61,22 @@ router.post('/anganwadi', async (req, res) => {
             tab,
             searchedDistrict,
             forValue,
-        }: AnganwadiCenter = req.body
+        } = req.body as AnganwadiCenter
 
         // Note: You would typically have validation here to ensure all required fields are present.
 
         // The database insertion logic is commented out, similar to user.ts.
         // You can uncomment and adapt it once your 'anganwadi_centers' table is ready.
         const result = await db.execute({
-            sql: 'INSERT INTO anganwadi_recruitments (anganwadiCenterName, district, ruralUrbanProject, area, vacantPositions, startDate, endDate, canApply, awwEventId, applyUrl, viewDocumentsUrl, tab, searchedDistrict, forValue) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            args: [anganwadiCenterName, district, ruralUrbanProject, area, vacantPositions, startDate, endDate, canApply, awwEventId, applyUrl, viewDocumentsUrl, tab, searchedDistrict, forValue],
+            sql: 'INSERT INTO anganwadi_recruitments (sl_no, anganwadi_center_name, district, rural_urban_project, area, vacant_positions, start_date, end_date, can_apply, aww_event_id, apply_url, view_documents_url, tab, searched_district, for_value) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            args: [slNo, anganwadiCenterName, district, ruralUrbanProject, area, vacantPositions, startDate, endDate, canApply, awwEventId, applyUrl, viewDocumentsUrl, tab, searchedDistrict, forValue],
         });
 
         res.status(201).json({
             success: true,
-            message: 'Anganwadi center record created successfully (simulation)',
+            message: 'Anganwadi recruitment record created successfully',
             // data: req.body, // Returning the request body as confirmation
-            data: { id: result.lastInsertRowid, ...req.body } // Use this line when DB is connected
+            data: { id: result.lastInsertRowid, ...req.body }, // Use this line when DB is connected
         })
     } catch (error: any) {
         res.status(500).json({
