@@ -51,6 +51,8 @@ router.get('/anganwadi', async (req, res) => {
             sql += ` WHERE ${conditions.join(' AND ')}`
         }
 
+        sql += ' ORDER BY end_date ASC'
+
         // Fetch all records from the anganwadi_recruitments table
         const result = await db.execute({
             sql,
