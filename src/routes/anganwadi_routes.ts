@@ -21,27 +21,22 @@ interface AnganwadiCenter {
     forValue: string
 }
 
-router.get('/anganwadi', (req, res) => {
-    const dummyData: AnganwadiCenter[] = [
-        {
-            slNo: '1',
-            anganwadiCenterName: 'GHOSAR -A',
-            district: 'ANGUL',
-            ruralUrbanProject: 'KISHORENAGAR',
-            area: 'GHOSAR : HOUSE NO-1 JAI SAHU to HOUSE NO- 228 ASHOK KUMAR MISHRA PADIABANDHU PALI : HOUSE NO-1 JAI SAHU to HOUSE NO- 228 ASHOK KUMAR MISHRA KISHORECHANDRAPUR : HOUSE NO-1 JAI SAHU to HOUSE NO- 228 ASHOK KUMAR MISHRA',
-            vacantPositions: '1',
-            startDate: '16/07/2026',
-            endDate: '30/07/2026',
-            canApply: true,
-            awwEventId: '32898',
-            applyUrl: 'https://engagement-awc.odisha.gov.in/applyForAwwRecruitmentFromOutside.htm?awwEventId=32898',
-            viewDocumentsUrl: 'https://engagement-awc.odisha.gov.in/viewAwwEventDocumentOutside.htm?awwEventId=32898',
-            tab: 'Active',
-            searchedDistrict: 'ANGUL',
-            forValue: 'W',
-        },
-    ]
-    res.json(dummyData)
+router.get('/anganwadi', async (req, res) => {
+    try {
+        // Fetch all records from the anganwadi_centers table
+        const result = await db.execute({
+            sql: 'SELECT * FROM anganwadi_centers',
+            args: [],
+        })
+
+        res.json(result.rows as unknown as AnganwadiCenter[])
+    } catch (error: any) {
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch anganwadi centers',
+            error: error.message,
+        })
+    }
 })
 
 /**
