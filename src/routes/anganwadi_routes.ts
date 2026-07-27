@@ -25,13 +25,24 @@ interface AnganwadiCenter {
 router.get('/anganwadi', async (req, res) => {
     try {
         const state = typeof req.query.state === 'string' ? req.query.state : undefined
+        const district = typeof req.query.district === 'string' ? req.query.district : undefined
 
         let sql = 'SELECT * FROM anganwadi_recruitments'
+        const conditions: string[] = []
         const args: any[] = []
 
         if (state) {
-            sql += ' WHERE LOWER(TRIM(state)) = LOWER(TRIM(?))'
+            conditions.push('LOWER(TRIM(COALESCE(state, ""))) = LOWER(TRIM(?))')
             args.push(state)
+        }
+
+        if (district) {
+            conditions.push('LOWER(TRIM(COALESCE(district, ""))) = LOWER(TRIM(?))')
+            args.push(district)
+        }
+
+        if (conditions.length > 0) {
+            sql += ` WHERE ${conditions.join(' AND ')}`
         }
 
         // Fetch all records from the anganwadi_recruitments table
