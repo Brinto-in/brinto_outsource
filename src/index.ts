@@ -56,6 +56,28 @@ app.get('/api-data', (req, res) => {
   })
 })
 
+app.get('/api/anganwadi', (req, res) => {
+  res.json([
+    {
+      slNo: '1',
+      anganwadiCenterName: 'GHOSAR -A',
+      district: 'ANGUL',
+      ruralUrbanProject: 'KISHORENAGAR',
+      area: 'GHOSAR : HOUSE NO-1 JAI SAHU to HOUSE NO- 228 ASHOK KUMAR MISHRA PADIABANDHU PALI : HOUSE NO-1 JAI SAHU to HOUSE NO- 228 ASHOK KUMAR MISHRA KISHORECHANDRAPUR : HOUSE NO-1 JAI SAHU to HOUSE NO- 228 ASHOK KUMAR MISHRA',
+      vacantPositions: '1',
+      startDate: '16/07/2026',
+      endDate: '30/07/2026',
+      canApply: true,
+      awwEventId: '32898',
+      applyUrl: 'https://engagement-awc.odisha.gov.in/applyForAwwRecruitmentFromOutside.htm?awwEventId=32898',
+      viewDocumentsUrl: 'https://engagement-awc.odisha.gov.in/viewAwwEventDocumentOutside.htm?awwEventId=32898',
+      tab: 'Active',
+      searchedDistrict: 'ANGUL',
+      forValue: 'W',
+    },
+  ])
+})
+
 /**
  * ✅ Get SAMS Cutoff Marks
  * POST /api/config/sams-cutoff-deg
