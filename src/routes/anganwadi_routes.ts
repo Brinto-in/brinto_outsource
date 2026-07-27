@@ -32,12 +32,12 @@ router.get('/anganwadi', async (req, res) => {
         const args: any[] = []
 
         if (state) {
-            conditions.push('LOWER(TRIM(COALESCE(state, ""))) = LOWER(TRIM(?))')
+            conditions.push("LOWER(TRIM(COALESCE(state, ''))) = LOWER(TRIM(?))")
             args.push(state)
         }
 
         if (district) {
-            conditions.push('LOWER(TRIM(COALESCE(district, ""))) = LOWER(TRIM(?))')
+            conditions.push("LOWER(TRIM(COALESCE(district, ''))) = LOWER(TRIM(?))")
             args.push(district)
         }
 
