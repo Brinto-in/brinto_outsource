@@ -76,7 +76,7 @@ router.post('/anganwadi', async (req, res) => {
             success: true,
             message: 'Anganwadi recruitment record created successfully',
             // data: req.body, // Returning the request body as confirmation
-            data: { id: result.lastInsertRowid, ...req.body }, // Use this line when DB is connected
+            data: { id: Number(result.lastInsertRowid), ...req.body }, // Use this line when DB is connected
         })
     } catch (error: any) {
         res.status(500).json({
