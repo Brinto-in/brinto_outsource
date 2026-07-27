@@ -24,17 +24,27 @@ interface AnganwadiCenter {
 
 router.get('/anganwadi', async (req, res) => {
     try {
-        // Fetch all records from the anganwadi_centers table
+        const state = typeof req.query.state === 'string' ? req.query.state : undefined
+
+        let sql = 'SELECT * FROM anganwadi_recruitments'
+        const args: any[] = []
+
+        if (state) {
+            sql += ' WHERE LOWER(TRIM(state)) = LOWER(TRIM(?))'
+            args.push(state)
+        }
+
+        // Fetch all records from the anganwadi_recruitments table
         const result = await db.execute({
-            sql: 'SELECT * FROM anganwadi_centers',
-            args: [],
+            sql,
+            args,
         })
 
         res.json(result.rows as unknown as AnganwadiCenter[])
     } catch (error: any) {
         res.status(500).json({
             success: false,
-            message: 'Failed to fetch anganwadi centers',
+            message: 'Failed to fetch anganwadi recruitments',
             error: error.message,
         })
     }
