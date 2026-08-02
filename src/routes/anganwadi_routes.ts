@@ -27,6 +27,7 @@ router.get('/anganwadi', async (req, res) => {
         const state = typeof req.query.state === 'string' ? req.query.state : undefined
         const district = typeof req.query.district === 'string' ? req.query.district : undefined
         const forValue = typeof req.query.for_value === 'string' ? req.query.for_value : undefined
+        const today = new Date().toISOString().slice(0, 10)
 
         let sql = 'SELECT * FROM anganwadi_recruitments'
         const conditions: string[] = []
@@ -41,6 +42,9 @@ router.get('/anganwadi', async (req, res) => {
             conditions.push("LOWER(TRIM(COALESCE(district, ''))) = LOWER(TRIM(?))")
             args.push(district)
         }
+
+        conditions.push("LOWER(TRIM(COALESCE(end_date, ''))) >= LOWER(TRIM(?))")
+        args.push(today)
 
         if (forValue) {
             const normalizedForValue = forValue.toLowerCase()
