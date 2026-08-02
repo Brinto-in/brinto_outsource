@@ -84,17 +84,19 @@ router.get('/details', verifyToken, async (req: AuthRequest, res) => {
 
 router.post('/users', async (req, res) => {
   try {
-    const { username, phone, email, role = 'student' } = req.body;
+    const { username, phone, email = null, role = 'student' } = req.body;
 
-    // Check existing user
+    if (!username || !phone) {
+      return res.status(400).json({
+        success: false,
+        message: 'Username and phone are required.',
+      });
+    }
+
+    // Check existing user by phone
     const existingUser = await db.execute({
-      sql: `
-        SELECT *
-        FROM users
-        WHERE phone = ? OR email = ?
-        LIMIT 1
-      `,
-      args: [phone || null, email || null],
+      sql: `SELECT * FROM users WHERE phone = ? LIMIT 1`,
+      args: [phone],
     });
 
     if (existingUser.rows.length > 0) {
@@ -105,26 +107,26 @@ router.post('/users', async (req, res) => {
       });
     }
 
-    // Create user
-    const result = await db.execute({
-      sql: `
-        INSERT INTO users (username, phone, email, role)
-        VALUES (?, ?, ?, ?)
-      `,
-      args: [username, phone || null, email || null, role],
+    // Get next ID
+    const nextIdResult = await db.execute({
+      sql: `SELECT IFNULL(MAX(id), 0) + 1 AS nextId FROM users`,
     });
 
-    const id = Number(result.lastInsertRowid);
-    const userId = `M_${10000 + id}`;
+    const nextId = Number(nextIdResult.rows[0].nextId);
+    const userId = `M_${10000 + nextId}`;
 
+    // Create user
     await db.execute({
-      sql: `UPDATE users SET user_id = ? WHERE id = ?`,
-      args: [userId, id],
+      sql: `
+        INSERT INTO users (user_id, username, phone, email, role)
+        VALUES (?, ?, ?, ?, ?)
+      `,
+      args: [phone, phone, phone, email, role],
     });
 
     const user = await db.execute({
-      sql: `SELECT * FROM users WHERE id = ?`,
-      args: [id],
+      sql: `SELECT * FROM users WHERE user_id = ?`,
+      args: [userId],
     });
 
     return res.status(201).json({
