@@ -81,4 +81,63 @@ router.get('/details', verifyToken, async (req: AuthRequest, res) => {
 //   }
 // });
 
+
+router.post('/users', async (req, res) => {
+  try {
+    const { username, phone, email, role = 'student' } = req.body;
+
+    // Check existing user
+    const existingUser = await db.execute({
+      sql: `
+        SELECT *
+        FROM users
+        WHERE phone = ? OR email = ?
+        LIMIT 1
+      `,
+      args: [phone || null, email || null],
+    });
+
+    if (existingUser.rows.length > 0) {
+      return res.status(200).json({
+        success: true,
+        message: 'User already exists.',
+        data: existingUser.rows[0],
+      });
+    }
+
+    // Create user
+    const result = await db.execute({
+      sql: `
+        INSERT INTO users (username, phone, email, role)
+        VALUES (?, ?, ?, ?)
+      `,
+      args: [username, phone || null, email || null, role],
+    });
+
+    const id = Number(result.lastInsertRowid);
+    const userId = `M_${10000 + id}`;
+
+    await db.execute({
+      sql: `UPDATE users SET user_id = ? WHERE id = ?`,
+      args: [userId, id],
+    });
+
+    const user = await db.execute({
+      sql: `SELECT * FROM users WHERE id = ?`,
+      args: [id],
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: 'User created successfully.',
+      data: user.rows[0],
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to create user.',
+      error: error.message,
+    });
+  }
+});
 export default router;
