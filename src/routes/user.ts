@@ -1,6 +1,7 @@
 import { Router } from 'express';
+import jwt from 'jsonwebtoken';
 import db from '../lib/db.js';
-import { verifyToken, AuthRequest } from '../middleware/auth.js';
+import { verifyToken, AuthRequest, JWT_SECRET } from '../middleware/auth.js';
 
 const router = Router();
 
@@ -100,10 +101,17 @@ router.post('/users', async (req, res) => {
     });
 
     if (existingUser.rows.length > 0) {
+      const userVal = existingUser.rows[0];
+      const token = jwt.sign(
+        { user_id: userVal.user_id, user_name: userVal.username },
+        JWT_SECRET,
+        { expiresIn: '30d' }
+      );
       return res.status(200).json({
         success: true,
         message: 'User already exists.',
-        data: existingUser.rows[0],
+        token,
+        data: userVal,
       });
     }
 
@@ -121,7 +129,7 @@ router.post('/users', async (req, res) => {
         INSERT INTO users (user_id, username, phone, email, role)
         VALUES (?, ?, ?, ?, ?)
       `,
-      args: [phone, phone, phone, email, role],
+      args: [userId, username, phone, email, role],
     });
 
     const user = await db.execute({
@@ -129,10 +137,18 @@ router.post('/users', async (req, res) => {
       args: [userId],
     });
 
+    const userVal = user.rows[0];
+    const token = jwt.sign(
+      { user_id: userVal.user_id, user_name: userVal.username },
+      JWT_SECRET,
+      { expiresIn: '30d' }
+    );
+
     return res.status(201).json({
       success: true,
       message: 'User created successfully.',
-      data: user.rows[0],
+      token,
+      data: userVal,
     });
   } catch (error: any) {
     return res.status(500).json({
