@@ -6,6 +6,7 @@ import dbRoutes from './routes/db-example.js'
 import userRoutes from './routes/user.js'
 import anganwadiRoutes from './routes/anganwadi_routes.js'
 import testRoutes from './routes/test.js'
+import attemptsRoutes from './routes/attempts.js'
 
 
 const __filename = fileURLToPath(import.meta.url)
@@ -26,6 +27,8 @@ app.use('/api', anganwadiRoutes)
 
 // Anganwadi routes
 app.use('/api/test', testRoutes)
+// Attempts routes
+app.use('/api/attempts', attemptsRoutes)
 
 // Home route - HTML
 app.get('/', (req, res) => {
