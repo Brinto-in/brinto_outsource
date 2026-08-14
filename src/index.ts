@@ -10,6 +10,18 @@ import anganwadiRoutes from './routes/anganwadi_routes.js'
 import testRoutes from './routes/test.js'
 import attemptsRoutes from './routes/attempts.js'
 
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+
+const r2 = new S3Client({
+  region: 'auto',
+  endpoint: `https://${process.env.CF_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID,
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+  },
+});
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
@@ -73,41 +85,62 @@ app.post('/sams-cutoff-deg', async (req, res) => {
   }
 })
 
-// Cloudflare Image Upload URL
 app.post('/api/get-upload-url', async (req, res) => {
   try {
-    if (!process.env.CF_ACCOUNT_ID || !process.env.CF_API_TOKEN) {
-      console.error('Cloudflare environment variables CF_ACCOUNT_ID or CF_API_TOKEN are not set.');
+    const {
+      fileName,
+      contentType = 'application/pdf',
+    } = req.body;
+
+    if (
+      !process.env.CF_ACCOUNT_ID ||
+      !process.env.R2_ACCESS_KEY_ID ||
+      !process.env.R2_SECRET_ACCESS_KEY ||
+      !process.env.R2_BUCKET_NAME
+    ) {
+      console.error('R2 environment variables are not configured.');
+
       return res.status(500).json({
         success: false,
-        message: 'Image upload service is not configured.',
+        message: 'R2 upload service is not configured.',
       });
     }
 
-    const cfResponse = await axios.post(
-      `https://api.cloudflare.com/client/v4/accounts/${process.env.CF_ACCOUNT_ID}/images/v2/direct_upload`,
-      {}, // The direct_upload API expects an empty body
-      {
-        headers: {
-          'Authorization': `Bearer ${process.env.CF_API_TOKEN}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-
-    const data = cfResponse.data;
-
-    if (!data.success) {
-      console.error('Cloudflare API Error:', data.errors);
-      return res.status(500).json({ success: false, message: 'Failed to get upload URL from provider.' });
+    if (!fileName) {
+      return res.status(400).json({
+        success: false,
+        message: 'fileName is required.',
+      });
     }
 
-    // Returns { result: { id, uploadURL }, success: true, errors: [], messages: [] }
-    res.json({ success: true, ...data.result });
+    const key = `uploads/${Date.now()}-${fileName}`;
 
-  } catch (error: any) {
-    console.error('Error getting Cloudflare upload URL:', error.response ? error.response.data : error.message);
-    res.status(500).json({ success: false, message: 'Failed to generate upload URL.' });
+    const command = new PutObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME,
+      Key: key,
+      ContentType: contentType,
+    });
+
+    const uploadURL = await getSignedUrl(r2, command, {
+      expiresIn: 600,
+    });
+
+    return res.json({
+      success: true,
+      uploadURL,
+      key,
+    });
+
+  } catch (error) {
+    console.error(
+      'Error generating R2 upload URL:',
+      error?.message || error
+    );
+
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to generate upload URL.',
+    });
   }
 });
 
