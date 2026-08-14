@@ -73,6 +73,44 @@ app.post('/sams-cutoff-deg', async (req, res) => {
   }
 })
 
+// Cloudflare Image Upload URL
+app.post('/api/get-upload-url', async (req, res) => {
+  try {
+    if (!process.env.CF_ACCOUNT_ID || !process.env.CF_API_TOKEN) {
+      console.error('Cloudflare environment variables CF_ACCOUNT_ID or CF_API_TOKEN are not set.');
+      return res.status(500).json({
+        success: false,
+        message: 'Image upload service is not configured.',
+      });
+    }
+
+    const cfResponse = await axios.post(
+      `https://api.cloudflare.com/client/v4/accounts/${process.env.CF_ACCOUNT_ID}/images/v2/direct_upload`,
+      {}, // The direct_upload API expects an empty body
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.CF_API_TOKEN}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    const data = cfResponse.data;
+
+    if (!data.success) {
+      console.error('Cloudflare API Error:', data.errors);
+      return res.status(500).json({ success: false, message: 'Failed to get upload URL from provider.' });
+    }
+
+    // Returns { result: { id, uploadURL }, success: true, errors: [], messages: [] }
+    res.json({ success: true, ...data.result });
+
+  } catch (error: any) {
+    console.error('Error getting Cloudflare upload URL:', error.response ? error.response.data : error.message);
+    res.status(500).json({ success: false, message: 'Failed to generate upload URL.' });
+  }
+});
+
 // Home
 app.get('/', (req, res) => {
   res.type('html').send(`
