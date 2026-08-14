@@ -114,7 +114,6 @@ app.post('/api/get-upload-url', async (req, res) => {
     }
 
     const key = `${Date.now()}-${fileName}`;
-    // const key = `${Date.now()}-${fileName}`;
 
     const command = new PutObjectCommand({
       Bucket: process.env.R2_BUCKET_NAME,
