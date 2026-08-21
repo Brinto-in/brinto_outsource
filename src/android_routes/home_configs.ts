@@ -45,8 +45,13 @@ const popularServices = [
 	},
 ]
 
-router.get('/home_config', (_req, res) => {
-	res.json(popularServices)
+router.get('/home_config', (req, res) => {
+	const state = req.get('state')
+
+	res.json(popularServices.map((service) => ({
+		...service,
+		state,
+	})))
 })
 
 export default router
