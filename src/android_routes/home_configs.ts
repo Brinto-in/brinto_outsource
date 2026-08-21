@@ -90,6 +90,11 @@ router.get('/states', (_req, res) => {
 router.get('/home_config', requireStateHeader, (req, res) => {
 	const state = req.get('state')
 
+	if (state !== 'Odisha') {
+		res.json([])
+		return
+	}
+
 	res.json(popularServices.map((service) => ({
 		...service,
 		state,
