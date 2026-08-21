@@ -76,10 +76,15 @@ const popularServices = [
 		imageUrl:
 			'https://lh3.googleusercontent.com/aida/AP1WRLsy_BZW_MT1x-2BVRu4AE-Mi2U4zJ6dEv2T5X9vlk9LtU_ersaRmBte9S9CctVf0M-u9jj3bR5Nzz7uPFaWBGNP_J7tKc0j_eA4neto7VVlV_UAMuMgwFsd4XaxX_k6XBMHjSIeGo1vAFLcu8THSAGQ6Vc-7nxpdjuxMXNFYZ2hd2ghdsJcqn4vJIwUhE1PzJ88bJmpfXlBs84ny2zmpebiWy_UD9xUqFAXkYveSOEwoyTlDobpeaeZtzA',
 	},
+	// {
+	// 	label: 'Notifications',
+	// 	imageUrl:
+	// 		'https://lh3.googleusercontent.com/aida/AP1WRLvVfRCBMu8NezXh-yD9rGUDinq68jjWITxs9KTHO1oeeBFIx8l37AbSbu6Y5qo8aWFn0_A-Sz1IrRJ6bNhnm4VFQjj31MVsSR28FHuzJ9OqywOyVSJ7szJVJQnH9J8vs1_yl3WAU--WVYkauDSW3F8PaZJ0xU7T__hYsdwpB_xpfFilKH29cPEoX5iEzUoEAu-z39mNvpGiE5CY-drvN0pYMOkgNTp8O4B7_qPPSOy6m0CwnEtc5wAG4kM',
+	// },
 	{
-		label: 'Notifications',
+		label: 'Voter ID',
 		imageUrl:
-			'https://lh3.googleusercontent.com/aida/AP1WRLvVfRCBMu8NezXh-yD9rGUDinq68jjWITxs9KTHO1oeeBFIx8l37AbSbu6Y5qo8aWFn0_A-Sz1IrRJ6bNhnm4VFQjj31MVsSR28FHuzJ9OqywOyVSJ7szJVJQnH9J8vs1_yl3WAU--WVYkauDSW3F8PaZJ0xU7T__hYsdwpB_xpfFilKH29cPEoX5iEzUoEAu-z39mNvpGiE5CY-drvN0pYMOkgNTp8O4B7_qPPSOy6m0CwnEtc5wAG4kM',
+			'https://lh3.googleusercontent.com/aida/AEtjO1WV1MFi0RX2kB_nc91vVMTQ6bsrgWPYU7btMlJ_FX8a9KrrVkEC-BJZQ7Hj-zPLV-K5_pRsm7UHejPyR7kQE3O1tN2HRiBeisHgMNSPAJxUK7rz8U2PKeIEMVkKhsoSWpknPmLcux995rigqaBFt6l1ZlGmkIKudi9p9MfZOFuvDXR5ngJTsnXoCJ5En40P5-c_ksOOI0TPOoYct78VfeH2EbFM8THQrd9Pf8x4khhJWkm8KI_tob5T5ZM',
 	},
 ]
 
