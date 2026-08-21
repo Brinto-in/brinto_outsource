@@ -9,6 +9,7 @@ import userRoutes from './routes/user.js'
 import anganwadiRoutes from './routes/anganwadi_routes.js'
 import testRoutes from './routes/test.js'
 import attemptsRoutes from './routes/attempts.js'
+import homeConfigRoutes from './android_routes/home_configs.js'
 
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
@@ -52,6 +53,9 @@ app.use('/api/test', testRoutes)
 
 // Attempts routes
 app.use('/api/attempts', attemptsRoutes)
+
+// Android home configuration
+app.use('/api/android', homeConfigRoutes)
 
 // SAMS Cutoff
 app.post('/sams-cutoff-deg', async (req, res) => {
