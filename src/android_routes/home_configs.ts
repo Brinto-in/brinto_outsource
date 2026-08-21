@@ -1,4 +1,5 @@
 import express from 'express'
+import { requireStateHeader } from '../middleware/state.js'
 
 const router = express.Router()
 
@@ -45,7 +46,7 @@ const popularServices = [
 	},
 ]
 
-router.get('/home_config', (req, res) => {
+router.get('/home_config', requireStateHeader, (req, res) => {
 	const state = req.get('state')
 
 	res.json(popularServices.map((service) => ({
