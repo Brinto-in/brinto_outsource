@@ -3,6 +3,43 @@ import { requireStateHeader } from '../middleware/state.js'
 
 const router = express.Router()
 
+const stateNames = [
+	'Andhra Pradesh',
+	'Arunachal Pradesh',
+	'Assam',
+	'Bihar',
+	'Chhattisgarh',
+	'Goa',
+	'Gujarat',
+	'Haryana',
+	'Himachal Pradesh',
+	'Jharkhand',
+	'Karnataka',
+	'Kerala',
+	'Madhya Pradesh',
+	'Maharashtra',
+	'Manipur',
+	'Meghalaya',
+	'Mizoram',
+	'Nagaland',
+	'Odisha',
+	'Punjab',
+	'Rajasthan',
+	'Sikkim',
+	'Tamil Nadu',
+	'Telangana',
+	'Tripura',
+	'Uttar Pradesh',
+	'Uttarakhand',
+	'West Bengal',
+]
+
+const states = stateNames.map((name, index) => ({
+	id: index + 1,
+	name,
+	imageUrl: `https://placehold.co/600x400/png?text=${encodeURIComponent(name)}`,
+}))
+
 const popularServices = [
 	{
 		label: 'PAN Card',
@@ -45,6 +82,10 @@ const popularServices = [
 			'https://lh3.googleusercontent.com/aida/AP1WRLvVfRCBMu8NezXh-yD9rGUDinq68jjWITxs9KTHO1oeeBFIx8l37AbSbu6Y5qo8aWFn0_A-Sz1IrRJ6bNhnm4VFQjj31MVsSR28FHuzJ9OqywOyVSJ7szJVJQnH9J8vs1_yl3WAU--WVYkauDSW3F8PaZJ0xU7T__hYsdwpB_xpfFilKH29cPEoX5iEzUoEAu-z39mNvpGiE5CY-drvN0pYMOkgNTp8O4B7_qPPSOy6m0CwnEtc5wAG4kM',
 	},
 ]
+
+router.get('/states', (_req, res) => {
+	res.json(states)
+})
 
 router.get('/home_config', requireStateHeader, (req, res) => {
 	const state = req.get('state')
