@@ -105,7 +105,7 @@ const spotlights = [
 		subtitle: 'Apply for a new PAN or make corrections.',
 		badge: 'PAN CARD',
 		image_url: 'https://i.ibb.co/CKZNFKzN/image.png',
-		dominant_color: '#780010',
+		dominant_color: '#051e58',
 		route: '/pan-services',
 	},
 	{
@@ -121,7 +121,7 @@ const spotlights = [
 		subtitle: 'Apply for vehicle registration or make corrections.',
 		badge: 'RTO',
 		image_url: 'https://i.ibb.co/d4dJ3dT2/image.png',
-		dominant_color: '#28a745',
+		dominant_color: '#2aa2cd',
 		route: '/rto-services',
 	}
 ]
