@@ -108,6 +108,22 @@ const spotlights = [
 		dominant_color: '#780010',
 		route: '/pan-services',
 	},
+	{
+		title: 'Get Your Voter ID Easily',
+		subtitle: 'Apply for a new Voter ID or make corrections.',
+		badge: 'VOTER ID',
+		image_url: 'https://i.ibb.co/qFxTLVTM/image.png',
+		dominant_color: '#007bff',
+		route: '/voter-id-services',
+	},
+	{
+		title: 'Get Your RTO Services Easily',
+		subtitle: 'Apply for vehicle registration or make corrections.',
+		badge: 'RTO',
+		image_url: 'https://i.ibb.co/d4dJ3dT2/image.png',
+		dominant_color: '#28a745',
+		route: '/rto-services',
+	}
 ]
 
 router.get('/states', (_req, res) => {
