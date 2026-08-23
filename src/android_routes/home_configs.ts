@@ -99,12 +99,27 @@ const quickCategories = [
 	// { label: 'Agriculture', icon: 'grass_outlined' },
 ]
 
+const spotlights = [
+	{
+		title: 'Get Your PAN Card Easily',
+		subtitle: 'Apply for a new PAN or make corrections.',
+		badge: 'PAN CARD',
+		image_url: 'https://i.ibb.co/CKZNFKzN/image.png',
+		dominant_color: '#780010',
+		route: '/pan-services',
+	},
+]
+
 router.get('/states', (_req, res) => {
 	res.json(states)
 })
 
 router.get('/quick_categories', (_req, res) => {
 	res.json(quickCategories)
+})
+
+router.get('/spotlight', (_req, res) => {
+	res.json(spotlights)
 })
 
 router.get('/home_config', requireStateHeader, (req, res) => {
