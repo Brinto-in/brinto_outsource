@@ -87,8 +87,24 @@ const popularServices = [
 	},
 ]
 
+const quickCategories = [
+	{ label: 'For You', icon: 'auto_awesome_rounded' },
+	{ label: 'Jobs', icon: 'work_outline_rounded' },
+	{ label: 'Documents', icon: 'description_outlined' },
+	{ label: 'Health', icon: 'local_hospital_outlined' },
+	{ label: 'Education', icon: 'school_outlined' },
+	{ label: 'Finance', icon: 'account_balance_outlined' },
+	{ label: 'Legal', icon: 'gavel_outlined' },
+	{ label: 'Property', icon: 'home_outlined' },
+	{ label: 'Agriculture', icon: 'grass_outlined' },
+]
+
 router.get('/states', (_req, res) => {
 	res.json(states)
+})
+
+router.get('/quick_categories', (_req, res) => {
+	res.json(quickCategories)
 })
 
 router.get('/home_config', requireStateHeader, (req, res) => {
