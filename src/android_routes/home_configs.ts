@@ -105,7 +105,7 @@ const spotlights = [
 		subtitle: 'Apply for a new PAN or make corrections.',
 		badge: 'PAN CARD',
 		image_url: 'https://i.ibb.co/CKZNFKzN/image.png',
-		dominant_color: '#051e58',
+		dominant_color: '#36ABAA',
 		route: '/pan-services',
 	},
 	{
@@ -113,7 +113,7 @@ const spotlights = [
 		subtitle: 'Apply for a new Voter ID or make corrections.',
 		badge: 'VOTER ID',
 		image_url: 'https://i.ibb.co/qFxTLVTM/image.png',
-		dominant_color: '#007bff',
+		dominant_color: '#8A54AB',
 		route: '/voter-id-services',
 	},
 	{
@@ -121,7 +121,7 @@ const spotlights = [
 		subtitle: 'Apply for vehicle registration or make corrections.',
 		badge: 'RTO',
 		image_url: 'https://i.ibb.co/d4dJ3dT2/image.png',
-		dominant_color: '#2aa2cd',
+		dominant_color: '#136B2D',
 		route: '/rto-services',
 	}
 ]
