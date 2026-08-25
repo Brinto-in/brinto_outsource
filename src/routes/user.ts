@@ -63,6 +63,8 @@ router.post('/state-session', optionalVerifyToken, async (req: AuthRequest, res)
     const userId = req.user?.user_id ?? null;
     const { state_name } = req.body;
     const sessionIdHeader = req.get('session_id')?.trim();
+    console.log(userId, state_name, sessionIdHeader);
+    
 
     if (typeof state_name !== 'string' || !state_name.trim()) {
       return res.status(400).json({
