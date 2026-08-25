@@ -44,8 +44,11 @@ const sendScholarships = async (
 	res: express.Response,
 	category?: 'corporate' | 'government' | 'odisha',
 	closingSoon = false,
+	location?: string,
 ) => {
-	const requestedState = closingSoon || category === 'corporate' ? null : await getSessionState(req, res)
+	const requestedState = closingSoon || category === 'corporate' || location
+		? null
+		: await getSessionState(req, res)
 	if (requestedState === undefined) return
 
 	const eduLevel = typeof req.query.eduLevel === 'string' ? req.query.eduLevel : undefined
@@ -70,6 +73,10 @@ const sendScholarships = async (
 	if (category) {
 		conditions.push('s.category = ?')
 		args.push(category)
+	}
+	if (location) {
+		conditions.push('LOWER(s.location) = ?')
+		args.push(location.toLowerCase())
 	}
 	if (requestedState) {
 		conditions.push('(s.location IS NULL OR LOWER(s.location) = ?)')
@@ -199,7 +206,7 @@ router.get('/scholarships/corporate', async (req, res) => {
 
 router.get('/scholarships/national', async (req, res) => {
 	try {
-		await sendScholarships(req, res, 'government')
+		await sendScholarships(req, res, 'government', false, 'India')
 	} catch (error: any) {
 		res.status(500).json({ message: 'Failed to fetch national scholarships', error: error.message })
 	}
