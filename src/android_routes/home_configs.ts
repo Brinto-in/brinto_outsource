@@ -259,8 +259,8 @@ router.get('/scholarships/providers', (req, res) => {
 			limit,
 		},
 		providers: filteredProviders.slice(start, start + limit).map((provider) => ({
-			...provider,
-			schemeCount: provider.schemes.length,
+			logoUrl: provider.logoUrl,
+			name: provider.name,
 			activeSchemeCount: provider.schemes.length,
 		})),
 	})
