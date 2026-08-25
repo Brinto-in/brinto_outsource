@@ -198,15 +198,15 @@ const scholarshipProviders: ScholarshipProvider[] = [
 const scholarshipProviderCategories: ProviderCategory[] = ['corporate', 'government', 'odisha']
 
 const scholarshipEducationLevels = [
-	{ key: 'class1to8', label: 'Class 1-8' },
-	{ key: 'class9to10', label: 'Class 9-10' },
-	{ key: 'class11to12', label: 'Class 11-12' },
-	{ key: 'diploma', label: 'Diploma' },
-	{ key: 'ug', label: 'UG' },
-	{ key: 'pg', label: 'PG' },
-]
+	'class1to8',
+	'class9to10',
+	'class11to12',
+	'diploma',
+	'ug',
+	'pg',
+] as const
 
-type ScholarshipEducationLevel = typeof scholarshipEducationLevels[number]['key']
+type ScholarshipEducationLevel = typeof scholarshipEducationLevels[number]
 
 interface ClosingSoonScholarship {
 	id: string
@@ -584,12 +584,6 @@ router.get('/scholarships/providers', (req, res) => {
 	})
 })
 
-router.get('/scholarships/education-levels', (_req, res) => {
-	res.json({
-		levels: scholarshipEducationLevels,
-	})
-})
-
 const sendScholarships = (
 	req: express.Request,
 	res: express.Response,
@@ -604,7 +598,7 @@ const sendScholarships = (
 	const pageValue = typeof req.query.page === 'string' ? Number.parseInt(req.query.page, 10) : 1
 	const limitValue = typeof req.query.limit === 'string' ? Number.parseInt(req.query.limit, 10) : defaultLimit
 
-	if (eduLevel && !scholarshipEducationLevels.some((level) => level.key === eduLevel)) {
+	if (eduLevel && !scholarshipEducationLevels.includes(eduLevel as ScholarshipEducationLevel)) {
 		res.status(400).json({
 			message: 'eduLevel must be one of: class1to8, class9to10, class11to12, diploma, ug, pg',
 		})
