@@ -46,6 +46,8 @@ const sendScholarships = async (
 	closingSoon = false,
 ) => {
 	const requestedState = await getSessionState(req, res)
+	console.log(requestedState);
+	
 	if (requestedState === undefined) return
 
 	const eduLevel = typeof req.query.eduLevel === 'string' ? req.query.eduLevel : undefined
