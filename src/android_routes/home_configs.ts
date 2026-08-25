@@ -168,7 +168,7 @@ router.get('/spotlight', (req, res) => {
 	}
 
 	const filteredSpotlights = spotlights.filter((spotlight) => {
-		const matchesType = !requestedType || requestedType === 'for_you' || spotlight.type === requestedType
+		const matchesType = !requestedType || spotlight.type === requestedType
 		const matchesState = !requestedState || spotlight.state === null || spotlight.state === requestedState
 
 		return matchesType && matchesState
