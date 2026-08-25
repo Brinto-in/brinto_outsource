@@ -197,6 +197,15 @@ const scholarshipProviders: ScholarshipProvider[] = [
 
 const scholarshipProviderCategories: ProviderCategory[] = ['corporate', 'government', 'odisha']
 
+const scholarshipEducationLevels = [
+	{ key: 'class1to8', label: 'Class 1-8' },
+	{ key: 'class9to10', label: 'Class 9-10' },
+	{ key: 'class11to12', label: 'Class 11-12' },
+	{ key: 'diploma', label: 'Diploma' },
+	{ key: 'ug', label: 'UG' },
+	{ key: 'pg', label: 'PG' },
+]
+
 router.get('/states', (_req, res) => {
 	res.json(states)
 })
@@ -263,6 +272,12 @@ router.get('/scholarships/providers', (req, res) => {
 			name: provider.name,
 			activeSchemeCount: provider.schemes.length,
 		})),
+	})
+})
+
+router.get('/scholarships/education-levels', (_req, res) => {
+	res.json({
+		levels: scholarshipEducationLevels,
 	})
 })
 
