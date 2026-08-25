@@ -75,6 +75,8 @@ const sendScholarships = async (
 		conditions.push('(s.location IS NULL OR LOWER(s.location) = ?)')
 		args.push(requestedState)
 	}
+	console.log({ requestedState, category, closingSoon, eduLevel });
+	
 	if (eduLevel) {
 		conditions.push('s.education_level = ?')
 		args.push(eduLevel)
