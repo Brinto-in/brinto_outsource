@@ -214,7 +214,7 @@ router.get('/scholarships/national', async (req, res) => {
 
 router.get('/scholarships/state-specific', async (req, res) => {
 	try {
-		await sendScholarships(req, res, 'odisha')
+		await sendScholarships(req, res)
 	} catch (error: any) {
 		res.status(500).json({ message: 'Failed to fetch state-specific scholarships', error: error.message })
 	}
