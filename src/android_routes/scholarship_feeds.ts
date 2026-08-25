@@ -52,12 +52,12 @@ const sendScholarships = async (
 	const pageValue = typeof req.query.page === 'string' ? Number.parseInt(req.query.page, 10) : 1
 	const limitValue = typeof req.query.limit === 'string' ? Number.parseInt(req.query.limit, 10) : 20
 
-	if (eduLevel && !scholarshipEducationLevels.includes(eduLevel as typeof scholarshipEducationLevels[number])) {
-		res.status(400).json({
-			message: 'eduLevel must be one of: class1to8, class9to10, class11to12, diploma, ug, pg',
-		})
-		return
-	}
+	// if (eduLevel && !scholarshipEducationLevels.includes(eduLevel as typeof scholarshipEducationLevels[number])) {
+	// 	res.status(400).json({
+	// 		message: 'eduLevel must be one of: class1to8, class9to10, class11to12, diploma, ug, pg',
+	// 	})
+	// 	return
+	// }
 
 	const page = Number.isInteger(pageValue) && pageValue > 0 ? pageValue : 1
 	const limit = Number.isInteger(limitValue) && limitValue > 0 ? Math.min(limitValue, 100) : 20
