@@ -214,6 +214,7 @@ interface ClosingSoonScholarship {
 	title: string
 	organization: string
 	category: ProviderCategory
+	target?: string
 	amount: string
 	lastDate: string
 	tag: {
@@ -250,6 +251,188 @@ const closingSoonScholarships: ClosingSoonScholarship[] = [
 		eduLevel: 'ug',
 	},
 	]
+
+const corporateScholarships: ClosingSoonScholarship[] = [
+	{
+		id: 'corp_1',
+		slug: 'bharti-airtel-scholarship',
+		title: 'Bharti Airtel Scholarship',
+		organization: 'Bharti Airtel Foundation',
+		category: 'corporate',
+		target: 'Engineering / Technology students',
+		amount: 'Rs.50,000 /yr',
+		lastDate: '2026-09-05T23:59:59+05:30',
+		tag: { label: 'Technical', colorHex: '#334155' },
+		state: null,
+		eduLevel: 'ug',
+	},
+	{
+		id: 'corp_4',
+		slug: 'reliance-foundation-ug-scholarship',
+		title: 'Reliance Foundation Undergraduate Scholarship',
+		organization: 'Reliance Foundation',
+		category: 'corporate',
+		target: 'Undergraduate students',
+		amount: 'Rs.50,000 /yr',
+		lastDate: '2026-09-20T23:59:59+05:30',
+		tag: { label: 'UG / PG', colorHex: '#64748B' },
+		state: null,
+		eduLevel: 'ug',
+	},
+	{
+		id: 'govt_3',
+		slug: 'pre-matric-scholarship',
+		title: 'Pre-Matric Scholarship',
+		organization: 'Ministry of Social Justice and Empowerment (Govt. of India)',
+		category: 'government',
+		amount: 'Rs.4,000 /yr',
+		lastDate: '2026-08-30T23:59:59+05:30',
+		tag: { label: 'School', colorHex: '#0F766E' },
+		state: null,
+		eduLevel: 'class1to8',
+	},
+	{
+		id: 'corp_5',
+		slug: 'aditya-birla-scholarship',
+		title: 'Aditya Birla Scholarship',
+		organization: 'Aditya Birla Group',
+		category: 'corporate',
+		target: 'Class 11-12 students',
+		amount: 'Rs.30,000 /yr',
+		lastDate: '2026-09-25T23:59:59+05:30',
+		tag: { label: 'Merit', colorHex: '#7C3AED' },
+		state: null,
+		eduLevel: 'class11to12',
+	},
+	{
+		id: 'corp_6',
+		slug: 'lic-golden-jubilee-scholarship',
+		title: 'LIC Golden Jubilee Scholarship',
+		organization: 'Life Insurance Corporation of India',
+		category: 'corporate',
+		target: 'Class 9-10 students',
+		amount: 'Rs.20,000 /yr',
+		lastDate: '2026-10-01T23:59:59+05:30',
+		tag: { label: 'School', colorHex: '#0F766E' },
+		state: null,
+		eduLevel: 'class9to10',
+	},
+	{
+		id: 'corp_7',
+		slug: 'mahindra-all-india-scholarship',
+		title: 'Mahindra All India Scholarship',
+		organization: 'Mahindra Group',
+		category: 'corporate',
+		target: 'Diploma students',
+		amount: 'Rs.25,000 /yr',
+		lastDate: '2026-10-10T23:59:59+05:30',
+		tag: { label: 'Diploma', colorHex: '#334155' },
+		state: null,
+		eduLevel: 'diploma',
+	},
+	{
+		id: 'corp_8',
+		slug: 'tata-trusts-pg-scholarship',
+		title: 'Tata Trusts Postgraduate Scholarship',
+		organization: 'Tata Trusts',
+		category: 'corporate',
+		target: 'Postgraduate students',
+		amount: 'Rs.60,000 /yr',
+		lastDate: '2026-10-20T23:59:59+05:30',
+		tag: { label: 'PG', colorHex: '#64748B' },
+		state: null,
+		eduLevel: 'pg',
+	},
+	{
+		id: 'corp_9',
+		slug: 'azim-premji-foundation-school-scholarship',
+		title: 'Azim Premji Foundation School Scholarship',
+		organization: 'Azim Premji Foundation',
+		category: 'corporate',
+		target: 'Class 1-8 students',
+		amount: 'Rs.10,000 /yr',
+		lastDate: '2026-10-25T23:59:59+05:30',
+		tag: { label: 'School', colorHex: '#0F766E' },
+		state: null,
+		eduLevel: 'class1to8',
+	},
+]
+
+const nationalScholarships: ClosingSoonScholarship[] = [
+	...closingSoonScholarships.filter((scholarship) => scholarship.category === 'government'),
+	{
+		id: 'govt_4',
+		slug: 'post-matric-scholarship',
+		title: 'Post-Matric Scholarship',
+		organization: 'Ministry of Social Justice and Empowerment (Govt. of India)',
+		category: 'government',
+		amount: 'Rs.8,000 /yr',
+		lastDate: '2026-10-15T23:59:59+05:30',
+		tag: { label: 'Higher Education', colorHex: '#1D4ED8' },
+		state: null,
+		eduLevel: 'class9to10',
+	},
+	{
+		id: 'govt_5',
+		slug: 'central-sector-scholarship',
+		title: 'Central Sector Scholarship',
+		organization: 'Department of Higher Education (Govt. of India)',
+		category: 'government',
+		amount: 'Rs.20,000 /yr',
+		lastDate: '2026-10-31T23:59:59+05:30',
+		tag: { label: 'Merit', colorHex: '#7C3AED' },
+		state: null,
+		eduLevel: 'ug',
+	},
+	{
+		id: 'govt_6',
+		slug: 'national-scholarship-diploma',
+		title: 'National Diploma Scholarship',
+		organization: 'Ministry of Education (Govt. of India)',
+		category: 'government',
+		amount: 'Rs.15,000 /yr',
+		lastDate: '2026-11-05T23:59:59+05:30',
+		tag: { label: 'Technical', colorHex: '#334155' },
+		state: null,
+		eduLevel: 'diploma',
+	},
+	{
+		id: 'govt_7',
+		slug: 'national-pg-scholarship',
+		title: 'National Postgraduate Scholarship',
+		organization: 'University Grants Commission',
+		category: 'government',
+		amount: 'Rs.36,000 /yr',
+		lastDate: '2026-11-15T23:59:59+05:30',
+		tag: { label: 'PG', colorHex: '#64748B' },
+		state: null,
+		eduLevel: 'pg',
+	},
+	{
+		id: 'govt_8',
+		slug: 'national-primary-scholarship',
+		title: 'National Primary Scholarship',
+		organization: 'Ministry of Education (Govt. of India)',
+		category: 'government',
+		amount: 'Rs.5,000 /yr',
+		lastDate: '2026-11-20T23:59:59+05:30',
+		tag: { label: 'School', colorHex: '#0F766E' },
+		state: null,
+		eduLevel: 'class1to8',
+	},
+	{
+		id: 'govt_9',
+		slug: 'national-senior-secondary-scholarship',
+		title: 'National Senior Secondary Scholarship',
+		organization: 'Ministry of Education (Govt. of India)',
+		category: 'government',
+		amount: 'Rs.10,000 /yr',
+		lastDate: '2026-11-25T23:59:59+05:30',
+		tag: { label: 'Merit', colorHex: '#7C3AED' },
+		state: null,
+		eduLevel: 'class11to12',
+	},
+]
 
 router.get('/states', (_req, res) => {
 	res.json(states)
@@ -326,11 +509,16 @@ router.get('/scholarships/education-levels', (_req, res) => {
 	})
 })
 
-router.get('/scholarships/closing-soon', (req, res) => {
+const sendScholarships = (
+	req: express.Request,
+	res: express.Response,
+	scholarships: ClosingSoonScholarship[],
+	defaultLimit: number,
+) => {
 	const state = typeof req.query.state === 'string' ? req.query.state.trim().toLowerCase() : ''
 	const eduLevel = typeof req.query.eduLevel === 'string' ? req.query.eduLevel : undefined
 	const pageValue = typeof req.query.page === 'string' ? Number.parseInt(req.query.page, 10) : 1
-	const limitValue = typeof req.query.limit === 'string' ? Number.parseInt(req.query.limit, 10) : 20
+	const limitValue = typeof req.query.limit === 'string' ? Number.parseInt(req.query.limit, 10) : defaultLimit
 
 	if (eduLevel && !scholarshipEducationLevels.some((level) => level.key === eduLevel)) {
 		res.status(400).json({
@@ -340,8 +528,8 @@ router.get('/scholarships/closing-soon', (req, res) => {
 	}
 
 	const page = Number.isInteger(pageValue) && pageValue > 0 ? pageValue : 1
-	const limit = Number.isInteger(limitValue) && limitValue > 0 ? Math.min(limitValue, 100) : 20
-	const filteredScholarships = closingSoonScholarships.filter((scholarship) => {
+	const limit = Number.isInteger(limitValue) && limitValue > 0 ? Math.min(limitValue, 100) : defaultLimit
+	const filteredScholarships = scholarships.filter((scholarship) => {
 		const matchesState = !state || scholarship.state === null || scholarship.state.toLowerCase() === state
 		const matchesEducationLevel = !eduLevel || scholarship.eduLevel === eduLevel
 
@@ -360,12 +548,25 @@ router.get('/scholarships/closing-soon', (req, res) => {
 			slug: scholarship.slug,
 			title: scholarship.title,
 			organization: scholarship.organization,
+			...(scholarship.target ? { target: scholarship.target } : {}),
 			category: scholarship.category,
 			amount: scholarship.amount,
 			lastDate: scholarship.lastDate,
 			tag: scholarship.tag,
 		})),
 	})
+}
+
+router.get('/scholarships/closing-soon', (req, res) => {
+	sendScholarships(req, res, closingSoonScholarships, 20)
+})
+
+router.get('/scholarships/corporate', (req, res) => {
+	sendScholarships(req, res, corporateScholarships, 20)
+})
+
+router.get('/scholarships/national', (req, res) => {
+	sendScholarships(req, res, nationalScholarships, 20)
 })
 
 router.get('/home_config', requireStateHeader, (req, res) => {
