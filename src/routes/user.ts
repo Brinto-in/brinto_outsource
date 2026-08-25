@@ -140,16 +140,16 @@ router.get('/state-session', optionalVerifyToken, async (req: AuthRequest, res) 
       });
     }
 
-    // const result = await db.execute({
-    //   sql: `
-    //     SELECT state_name
-    //     FROM user_states
-    //     WHERE session_id = ?
-    //       AND ((user_id = ?) OR (user_id IS NULL AND ? IS NULL))
-    //     LIMIT 1
-    //   `,
-    //   args: [sessionId, userId, userId],
-    // });
+    const result = await db.execute({
+      sql: `
+        SELECT state_name
+        FROM user_states
+        WHERE session_id = ?
+          AND ((user_id = ?) OR (user_id IS NULL AND ? IS NULL))
+        LIMIT 1
+      `,
+      args: [sessionId, userId, userId],
+    });
 
     if (result.rows.length === 0) {
       return res.status(404).json({
