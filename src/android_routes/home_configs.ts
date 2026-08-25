@@ -434,6 +434,87 @@ const nationalScholarships: ClosingSoonScholarship[] = [
 	},
 ]
 
+const stateSpecificScholarships: ClosingSoonScholarship[] = [
+	{
+		id: 'odi_1',
+		slug: 'e-medhabruti-ug-merit',
+		title: 'e-Medhabruti - UG Merit',
+		organization: 'Higher Education Dept, Govt of Odisha',
+		category: 'odisha',
+		target: 'UG merit students',
+		amount: 'Rs.5,000 /yr',
+		lastDate: '2026-08-25T23:59:59+05:30',
+		tag: { label: 'Merit', colorHex: '#7C3AED' },
+		state: 'odisha',
+		eduLevel: 'ug',
+	},
+	{
+		id: 'odi_2',
+		slug: 'e-medhabruti-technical',
+		title: 'e-Medhabruti - Technical & Professional',
+		organization: 'Higher Education Dept, Govt of Odisha',
+		category: 'odisha',
+		target: 'Technical and professional students',
+		amount: 'Rs.10,000 /yr',
+		lastDate: '2026-08-30T23:59:59+05:30',
+		tag: { label: 'Technical', colorHex: '#334155' },
+		state: 'odisha',
+		eduLevel: 'diploma',
+	},
+	{
+		id: 'odi_3',
+		slug: 'odisha-pre-matric-scholarship',
+		title: 'Odisha Pre-Matric Scholarship',
+		organization: 'Government of Odisha',
+		category: 'odisha',
+		target: 'Class 1-8 students',
+		amount: 'Rs.3,000 /yr',
+		lastDate: '2026-09-05T23:59:59+05:30',
+		tag: { label: 'School', colorHex: '#0F766E' },
+		state: 'odisha',
+		eduLevel: 'class1to8',
+	},
+	{
+		id: 'odi_4',
+		slug: 'odisha-secondary-scholarship',
+		title: 'Odisha Secondary Scholarship',
+		organization: 'Government of Odisha',
+		category: 'odisha',
+		target: 'Class 9-10 students',
+		amount: 'Rs.4,000 /yr',
+		lastDate: '2026-09-10T23:59:59+05:30',
+		tag: { label: 'School', colorHex: '#0F766E' },
+		state: 'odisha',
+		eduLevel: 'class9to10',
+	},
+	{
+		id: 'odi_5',
+		slug: 'odisha-higher-secondary-scholarship',
+		title: 'Odisha Higher Secondary Scholarship',
+		organization: 'Government of Odisha',
+		category: 'odisha',
+		target: 'Class 11-12 students',
+		amount: 'Rs.6,000 /yr',
+		lastDate: '2026-09-15T23:59:59+05:30',
+		tag: { label: 'Merit', colorHex: '#7C3AED' },
+		state: 'odisha',
+		eduLevel: 'class11to12',
+	},
+	{
+		id: 'odi_6',
+		slug: 'odisha-pg-scholarship',
+		title: 'Odisha Postgraduate Scholarship',
+		organization: 'Government of Odisha',
+		category: 'odisha',
+		target: 'Postgraduate students',
+		amount: 'Rs.12,000 /yr',
+		lastDate: '2026-09-20T23:59:59+05:30',
+		tag: { label: 'PG', colorHex: '#64748B' },
+		state: 'odisha',
+		eduLevel: 'pg',
+	},
+]
+
 router.get('/states', (_req, res) => {
 	res.json(states)
 })
@@ -514,8 +595,11 @@ const sendScholarships = (
 	res: express.Response,
 	scholarships: ClosingSoonScholarship[],
 	defaultLimit: number,
+	defaultState = '',
 ) => {
-	const state = typeof req.query.state === 'string' ? req.query.state.trim().toLowerCase() : ''
+	const state = typeof req.query.state === 'string'
+		? req.query.state.trim().toLowerCase()
+		: defaultState
 	const eduLevel = typeof req.query.eduLevel === 'string' ? req.query.eduLevel : undefined
 	const pageValue = typeof req.query.page === 'string' ? Number.parseInt(req.query.page, 10) : 1
 	const limitValue = typeof req.query.limit === 'string' ? Number.parseInt(req.query.limit, 10) : defaultLimit
@@ -567,6 +651,10 @@ router.get('/scholarships/corporate', (req, res) => {
 
 router.get('/scholarships/national', (req, res) => {
 	sendScholarships(req, res, nationalScholarships, 20)
+})
+
+router.get('/scholarships/state-specific', (req, res) => {
+	sendScholarships(req, res, stateSpecificScholarships, 20, 'odisha')
 })
 
 router.get('/home_config', requireStateHeader, (req, res) => {
