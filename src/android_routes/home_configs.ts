@@ -145,6 +145,58 @@ const spotlights: Spotlight[] = [
 	}
 ]
 
+type ProviderCategory = 'corporate' | 'government' | 'odisha'
+
+interface ScholarshipScheme {
+	id: string
+	slug: string
+	title: string
+}
+
+interface ScholarshipProvider {
+	id: string
+	name: string
+	category: ProviderCategory
+	logoUrl: string | null
+	schemes: ScholarshipScheme[]
+}
+
+const scholarshipProviders: ScholarshipProvider[] = [
+	{
+		id: 'hdfc-bank',
+		name: 'HDFC Bank',
+		category: 'corporate',
+		logoUrl: 'https://cdn.brinto.in/providers/hdfc-bank.png',
+		schemes: [
+			{
+				id: 'corp_3',
+				slug: 'hdfc-parivartan-ecss',
+				title: "HDFC Bank Parivartan's ECSS",
+			},
+		],
+	},
+	{
+		id: 'govt-of-odisha-higher-education',
+		name: 'Higher Education Dept, Govt of Odisha',
+		category: 'odisha',
+		logoUrl: null,
+		schemes: [
+			{
+				id: 'odi_1',
+				slug: 'e-medhabruti-ug-merit',
+				title: 'e-Medhabruti - UG Merit',
+			},
+			{
+				id: 'odi_2',
+				slug: 'e-medhabruti-technical',
+				title: 'e-Medhabruti - Technical & Professional',
+			},
+		],
+	},
+]
+
+const scholarshipProviderCategories: ProviderCategory[] = ['corporate', 'government', 'odisha']
+
 router.get('/states', (_req, res) => {
 	res.json(states)
 })
@@ -175,6 +227,43 @@ router.get('/spotlight', (req, res) => {
 	})
 
 	res.json(filteredSpotlights)
+})
+
+router.get('/scholarships/providers', (req, res) => {
+	const query = typeof req.query.q === 'string' ? req.query.q.trim().toLowerCase() : ''
+	const category = typeof req.query.category === 'string' ? req.query.category : undefined
+	const pageValue = typeof req.query.page === 'string' ? Number.parseInt(req.query.page, 10) : 1
+	const limitValue = typeof req.query.limit === 'string' ? Number.parseInt(req.query.limit, 10) : 50
+
+	if (category && !scholarshipProviderCategories.includes(category as ProviderCategory)) {
+		res.status(400).json({
+			message: `category must be one of: ${scholarshipProviderCategories.join(', ')}`,
+		})
+		return
+	}
+
+	const page = Number.isInteger(pageValue) && pageValue > 0 ? pageValue : 1
+	const limit = Number.isInteger(limitValue) && limitValue > 0 ? Math.min(limitValue, 100) : 50
+	const filteredProviders = scholarshipProviders.filter((provider) => {
+		const matchesQuery = !query || provider.name.toLowerCase().includes(query)
+		const matchesCategory = !category || provider.category === category
+
+		return matchesQuery && matchesCategory
+	})
+	const start = (page - 1) * limit
+
+	res.json({
+		meta: {
+			total: filteredProviders.length,
+			page,
+			limit,
+		},
+		providers: filteredProviders.slice(start, start + limit).map((provider) => ({
+			...provider,
+			schemeCount: provider.schemes.length,
+			activeSchemeCount: provider.schemes.length,
+		})),
+	})
 })
 
 router.get('/home_config', requireStateHeader, (req, res) => {
