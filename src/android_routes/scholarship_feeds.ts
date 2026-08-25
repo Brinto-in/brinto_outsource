@@ -45,7 +45,7 @@ const sendScholarships = async (
 	category?: 'corporate' | 'government' | 'odisha',
 	closingSoon = false,
 ) => {
-	const requestedState = closingSoon ? null : await getSessionState(req, res)
+	const requestedState = closingSoon || category === 'corporate' ? null : await getSessionState(req, res)
 	if (requestedState === undefined) return
 
 	const eduLevel = typeof req.query.eduLevel === 'string' ? req.query.eduLevel : undefined
@@ -75,8 +75,6 @@ const sendScholarships = async (
 		conditions.push('(s.location IS NULL OR LOWER(s.location) = ?)')
 		args.push(requestedState)
 	}
-	console.log({ requestedState, category, closingSoon, eduLevel });
-	
 	if (eduLevel) {
 		conditions.push('s.education_level = ?')
 		args.push(eduLevel)
