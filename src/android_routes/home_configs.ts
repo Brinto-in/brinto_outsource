@@ -1,5 +1,5 @@
 import express from 'express'
-import { requireStateHeader } from '../middleware/state.js'
+import db from '../lib/db.js'
 
 const router = express.Router()
 
@@ -548,82 +548,46 @@ const sendScholarships = (
 	})
 }
 
-router.get('/scholarships/closing-soon', (req, res) => {
-	sendScholarships(req, res, closingSoonScholarships, 20)
-})
+router.get('/home_config', async (req, res) => {
+	try {
+		const sessionId = req.get('session_id')?.trim()
+		if (!sessionId) {
+			res.json([])
+			return
+		}
 
-router.get('/scholarships/corporate', (req, res) => {
-	sendScholarships(req, res, corporateScholarships, 20)
-})
+		const result = await db.execute({
+			sql: `SELECT state_name
+				FROM user_states
+				WHERE session_id = ?
+				LIMIT 1`,
+			args: [sessionId],
+		})
+		const state = result.rows[0]?.state_name
+		if (typeof state !== 'string' || !state.trim()) {
+			res.status(404).json({
+				success: false,
+				message: 'Session not found.',
+			})
+			return
+		}
 
-router.get('/scholarships/national', (req, res) => {
-	sendScholarships(req, res, nationalScholarships, 20)
-})
+		if (state.trim().toLowerCase() === 'odisha') {
+			res.json(popularServices.map((service) => ({
+				...service,
+				state: state.trim(),
+			})))
+			return
+		}
 
-router.get('/scholarships/state-specific', (req, res) => {
-	sendScholarships(req, res, stateSpecificScholarships, 20, 'odisha')
-})
-
-router.get('/home_config', requireStateHeader, (req, res) => {
-	const state = req.get('state')
-
-	if (state === 'Odisha') {
-		res.json(popularServices.map((service) => ({
-			...service,
-			state,
-		})))
-		return
-	} else if (state === 'Uttar Pradesh' || state === 'Telangana') {
-		const popularServices = [
-			{
-				label: 'PAN Card',
-				imageUrl:
-					'https://blog.brinto.in/brinto/pan.png',
-			},
-			{
-				label: 'RTO',
-				imageUrl:
-					'https://blog.brinto.in/brinto/rto.png',
-			},
-			{
-				label: 'Scholarships',
-				imageUrl:
-					'https://blog.brinto.in/brinto/scholarships.png',
-			},
-			{
-				label: 'Anganwadi',
-				imageUrl:
-					'https://blog.brinto.in/brinto/anganwadi.png',
-			},
-			// {
-			// 	label: 'Tahasil',
-			// 	imageUrl:
-			// 		'https://blog.brinto.in/brinto/tahasil.png',
-			// },
-			{
-				label: 'Near Me',
-				imageUrl:
-					'https://blog.brinto.in/brinto/nearme.png',
-			},
-			{
-				label: 'Feeds',
-				imageUrl:
-					'https://blog.brinto.in/brinto/feeds.png',
-			},
-			{
-				label: 'Notifications',
-				imageUrl:
-					'https://blog.brinto.in/brinto/notification.png',
-			},
-		]
-		res.json(popularServices.map((service) => ({
-			...service,
-			state,
-		})))
-		return
+		res.json([])
+	} catch (error: any) {
+		res.status(500).json({
+			success: false,
+			message: 'Failed to fetch home configuration.',
+			error: error.message,
+		})
 	}
-
-	res.json([])
 })
 
 export default router
