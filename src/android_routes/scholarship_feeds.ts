@@ -6,11 +6,19 @@ const router = express.Router()
 router.get('/scholarships/education-levels', async (_req, res) => {
 	try {
 		const result = await db.execute(
-			'SELECT key, label FROM education_levels ORDER BY display_order ASC',
+			'SELECT * FROM education_levels ORDER BY display_order ASC',
 		)
+		const levels = result.rows.map((row) => {
+			const educationLevel = row as Record<string, unknown>
+
+			return {
+				key: educationLevel.key ?? educationLevel.level_key ?? educationLevel.level ?? educationLevel.slug,
+				label: educationLevel.label ?? educationLevel.level_label ?? educationLevel.name ?? educationLevel.display_name,
+			}
+		})
 
 		res.json({
-			levels: result.rows,
+			levels,
 		})
 	} catch (error: any) {
 		res.status(500).json({
