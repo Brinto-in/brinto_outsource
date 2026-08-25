@@ -64,7 +64,7 @@ const sendScholarships = async (
 	const conditions: string[] = []
 	const args: (string | number)[] = []
 	if (closingSoon) {
-		conditions.push("datetime(s.last_date) >= datetime('now')")
+		conditions.push("datetime(s.last_date) BETWEEN datetime('now') AND datetime('now', '+3 days')")
 	}
 
 	if (category) {
