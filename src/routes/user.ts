@@ -94,43 +94,42 @@ router.post('/state-session', optionalVerifyToken, async (req: AuthRequest, res)
 });
 
 /**
- * Get the authenticated user's state session
- * GET /api/user/state-session?state_name=Odisha
+ * Get a state name from a session ID
+ * GET /api/user/state-session?session_id=<session-id>
  */
 router.get('/state-session', optionalVerifyToken, async (req: AuthRequest, res) => {
   try {
     const userId = req.user?.user_id ?? null;
-    const stateName = typeof req.query.state_name === 'string' ? req.query.state_name.trim() : '';
+    const sessionId = typeof req.query.session_id === 'string' ? req.query.session_id.trim() : '';
 
-    if (!stateName) {
+    if (!sessionId) {
       return res.status(400).json({
         success: false,
-        message: 'state_name query parameter is required.',
+        message: 'session_id query parameter is required.',
       });
     }
 
     const result = await db.execute({
       sql: `
-        SELECT session_id
+        SELECT state_name
         FROM user_states
-        WHERE state_name = ?
+        WHERE session_id = ?
           AND ((user_id = ?) OR (user_id IS NULL AND ? IS NULL))
-        ORDER BY id DESC
         LIMIT 1
       `,
-      args: [stateName, userId, userId],
+      args: [sessionId, userId, userId],
     });
 
     if (result.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        message: 'State session not found.',
+        message: 'Session not found.',
       });
     }
 
     return res.json({
       success: true,
-      session_id: result.rows[0].session_id,
+      state_name: result.rows[0].state_name,
     });
   } catch (error: any) {
     return res.status(500).json({
