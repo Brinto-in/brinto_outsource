@@ -62,12 +62,41 @@ router.post('/state-session', optionalVerifyToken, async (req: AuthRequest, res)
   try {
     const userId = req.user?.user_id ?? null;
     const { state_name } = req.body;
+    const sessionIdHeader = req.get('session_id')?.trim();
 
     if (typeof state_name !== 'string' || !state_name.trim()) {
       return res.status(400).json({
         success: false,
         message: 'state_name is required.',
       });
+    }
+
+    if (sessionIdHeader) {
+      const existingSession = await db.execute({
+        sql: `
+          SELECT id
+          FROM user_states
+          WHERE session_id = ?
+          LIMIT 1
+        `,
+        args: [sessionIdHeader],
+      });
+
+      if (existingSession.rows.length > 0) {
+        await db.execute({
+          sql: `
+            UPDATE user_states
+            SET state_name = ?
+            WHERE session_id = ?
+          `,
+          args: [state_name.trim(), sessionIdHeader],
+        });
+
+        return res.json({
+          success: true,
+          session_id: sessionIdHeader,
+        });
+      }
     }
 
     const sessionId = randomUUID();
