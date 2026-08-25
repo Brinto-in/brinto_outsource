@@ -45,9 +45,7 @@ const sendScholarships = async (
 	category?: 'corporate' | 'government' | 'odisha',
 	closingSoon = false,
 ) => {
-	const requestedState = await getSessionState(req, res)
-	console.log(requestedState);
-	
+	const requestedState = closingSoon ? null : await getSessionState(req, res)
 	if (requestedState === undefined) return
 
 	const eduLevel = typeof req.query.eduLevel === 'string' ? req.query.eduLevel : undefined
