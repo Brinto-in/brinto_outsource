@@ -206,6 +206,51 @@ const scholarshipEducationLevels = [
 	{ key: 'pg', label: 'PG' },
 ]
 
+type ScholarshipEducationLevel = typeof scholarshipEducationLevels[number]['key']
+
+interface ClosingSoonScholarship {
+	id: string
+	slug: string
+	title: string
+	organization: string
+	category: ProviderCategory
+	amount: string
+	lastDate: string
+	tag: {
+		label: string
+		colorHex: string
+	}
+	state: string | null
+	eduLevel: ScholarshipEducationLevel
+}
+
+const closingSoonScholarships: ClosingSoonScholarship[] = [
+	{
+		id: 'govt_2',
+		slug: 'national-means-merit-scholarship',
+		title: 'National Means-cum-Merit Scholarship',
+		organization: 'Ministry of Education (Govt. of India)',
+		category: 'government',
+		amount: 'Rs.12,000 /yr',
+		lastDate: '2026-08-25T23:59:59+05:30',
+		tag: { label: 'Merit', colorHex: '#7C3AED' },
+		state: null,
+		eduLevel: 'class9to10',
+	},
+	{
+		id: 'corp_2',
+		slug: 'tata-capital-pankh-scholarship',
+		title: 'Tata Capital Pankh Scholarship',
+		organization: 'Tata Capital',
+		category: 'corporate',
+		amount: 'Rs.12,000 - Rs.1,00,000',
+		lastDate: '2026-08-25T23:59:59+05:30',
+		tag: { label: 'UG / PG', colorHex: '#64748B' },
+		state: null,
+		eduLevel: 'ug',
+	},
+	]
+
 router.get('/states', (_req, res) => {
 	res.json(states)
 })
@@ -278,6 +323,48 @@ router.get('/scholarships/providers', (req, res) => {
 router.get('/scholarships/education-levels', (_req, res) => {
 	res.json({
 		levels: scholarshipEducationLevels,
+	})
+})
+
+router.get('/scholarships/closing-soon', (req, res) => {
+	const state = typeof req.query.state === 'string' ? req.query.state.trim().toLowerCase() : ''
+	const eduLevel = typeof req.query.eduLevel === 'string' ? req.query.eduLevel : undefined
+	const pageValue = typeof req.query.page === 'string' ? Number.parseInt(req.query.page, 10) : 1
+	const limitValue = typeof req.query.limit === 'string' ? Number.parseInt(req.query.limit, 10) : 20
+
+	if (eduLevel && !scholarshipEducationLevels.some((level) => level.key === eduLevel)) {
+		res.status(400).json({
+			message: 'eduLevel must be one of: class1to8, class9to10, class11to12, diploma, ug, pg',
+		})
+		return
+	}
+
+	const page = Number.isInteger(pageValue) && pageValue > 0 ? pageValue : 1
+	const limit = Number.isInteger(limitValue) && limitValue > 0 ? Math.min(limitValue, 100) : 20
+	const filteredScholarships = closingSoonScholarships.filter((scholarship) => {
+		const matchesState = !state || scholarship.state === null || scholarship.state.toLowerCase() === state
+		const matchesEducationLevel = !eduLevel || scholarship.eduLevel === eduLevel
+
+		return matchesState && matchesEducationLevel
+	})
+	const start = (page - 1) * limit
+
+	res.json({
+		meta: {
+			total: filteredScholarships.length,
+			page,
+			limit,
+		},
+		scholarships: filteredScholarships.slice(start, start + limit).map((scholarship) => ({
+			id: scholarship.id,
+			slug: scholarship.slug,
+			title: scholarship.title,
+			organization: scholarship.organization,
+			category: scholarship.category,
+			amount: scholarship.amount,
+			lastDate: scholarship.lastDate,
+			tag: scholarship.tag,
+		})),
 	})
 })
 
