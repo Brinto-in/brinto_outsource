@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { randomUUID } from 'crypto';
 import jwt from 'jsonwebtoken';
 import db from '../lib/db.js';
-import { verifyToken, AuthRequest, JWT_SECRET } from '../middleware/auth.js';
+import { verifyToken, optionalVerifyToken, AuthRequest, JWT_SECRET } from '../middleware/auth.js';
 
 const router = Router();
 
@@ -58,9 +58,9 @@ router.get('/details', verifyToken, async (req: AuthRequest, res) => {
  * POST /api/user/state-session
  * Body: { state_name: string }
  */
-router.post('/state-session', verifyToken, async (req: AuthRequest, res) => {
+router.post('/state-session', optionalVerifyToken, async (req: AuthRequest, res) => {
   try {
-    const { user_id } = req.user!;
+    const userId = req.user?.user_id ?? null;
     const { state_name } = req.body;
 
     if (typeof state_name !== 'string' || !state_name.trim()) {
@@ -77,7 +77,7 @@ router.post('/state-session', verifyToken, async (req: AuthRequest, res) => {
         INSERT INTO user_states (user_id, session_id, state_name)
         VALUES (?, ?, ?)
       `,
-      args: [user_id, sessionId, state_name.trim()],
+      args: [userId, sessionId, state_name.trim()],
     });
 
     return res.status(201).json({
@@ -97,9 +97,9 @@ router.post('/state-session', verifyToken, async (req: AuthRequest, res) => {
  * Get the authenticated user's state session
  * GET /api/user/state-session?state_name=Odisha
  */
-router.get('/state-session', verifyToken, async (req: AuthRequest, res) => {
+router.get('/state-session', optionalVerifyToken, async (req: AuthRequest, res) => {
   try {
-    const { user_id } = req.user!;
+    const userId = req.user?.user_id ?? null;
     const stateName = typeof req.query.state_name === 'string' ? req.query.state_name.trim() : '';
 
     if (!stateName) {
@@ -113,11 +113,12 @@ router.get('/state-session', verifyToken, async (req: AuthRequest, res) => {
       sql: `
         SELECT session_id
         FROM user_states
-        WHERE user_id = ? AND state_name = ?
+        WHERE state_name = ?
+          AND ((user_id = ?) OR (user_id IS NULL AND ? IS NULL))
         ORDER BY id DESC
         LIMIT 1
       `,
-      args: [user_id, stateName],
+      args: [stateName, userId, userId],
     });
 
     if (result.rows.length === 0) {
