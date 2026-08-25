@@ -550,7 +550,7 @@ const sendScholarships = (
 
 router.get('/home_config', async (req, res) => {
 	try {
-		const sessionId = req.get('session_id')?.trim()
+		const sessionId = req.get('session_id')?.trim();
 		if (!sessionId) {
 			res.json([])
 			return
