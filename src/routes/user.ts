@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { randomUUID } from 'crypto';
 import jwt from 'jsonwebtoken';
 import db from '../lib/db.js';
 import { verifyToken, AuthRequest, JWT_SECRET } from '../middleware/auth.js';
@@ -47,6 +48,93 @@ router.get('/details', verifyToken, async (req: AuthRequest, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to fetch user details',
+      error: error.message,
+    });
+  }
+});
+
+/**
+ * Create a state session for the authenticated user
+ * POST /api/user/state-session
+ * Body: { state_name: string }
+ */
+router.post('/state-session', verifyToken, async (req: AuthRequest, res) => {
+  try {
+    const { user_id } = req.user!;
+    const { state_name } = req.body;
+
+    if (typeof state_name !== 'string' || !state_name.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: 'state_name is required.',
+      });
+    }
+
+    const sessionId = randomUUID();
+
+    await db.execute({
+      sql: `
+        INSERT INTO user_states (user_id, session_id, state_name)
+        VALUES (?, ?, ?)
+      `,
+      args: [user_id, sessionId, state_name.trim()],
+    });
+
+    return res.status(201).json({
+      success: true,
+      session_id: sessionId,
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to create state session.',
+      error: error.message,
+    });
+  }
+});
+
+/**
+ * Get the authenticated user's state session
+ * GET /api/user/state-session?state_name=Odisha
+ */
+router.get('/state-session', verifyToken, async (req: AuthRequest, res) => {
+  try {
+    const { user_id } = req.user!;
+    const stateName = typeof req.query.state_name === 'string' ? req.query.state_name.trim() : '';
+
+    if (!stateName) {
+      return res.status(400).json({
+        success: false,
+        message: 'state_name query parameter is required.',
+      });
+    }
+
+    const result = await db.execute({
+      sql: `
+        SELECT session_id
+        FROM user_states
+        WHERE user_id = ? AND state_name = ?
+        ORDER BY id DESC
+        LIMIT 1
+      `,
+      args: [user_id, stateName],
+    });
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'State session not found.',
+      });
+    }
+
+    return res.json({
+      success: true,
+      session_id: result.rows[0].session_id,
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch state session.',
       error: error.message,
     });
   }
