@@ -99,7 +99,20 @@ const quickCategories = [
 	// { label: 'Agriculture', icon: 'grass_outlined' },
 ]
 
-const spotlights = [
+type SpotlightType = 'for_you' | 'anganwadi' | 'scholarship' | 'identity'
+
+interface Spotlight {
+	title: string
+	subtitle: string
+	badge: string
+	image_url: string
+	dominant_color: string
+	route: string
+	type: SpotlightType
+	state: string | null
+}
+
+const spotlights: Spotlight[] = [
 	{
 		title: 'Get Your PAN Card Easily',
 		subtitle: 'Apply for a new PAN or make corrections.',
@@ -107,6 +120,8 @@ const spotlights = [
 		image_url: 'https://i.ibb.co/CKZNFKzN/image.png',
 		dominant_color: '#36ABAA',
 		route: '/pan-services',
+		type: 'identity',
+		state: null,
 	},
 	{
 		title: 'Get Your Voter ID Easily',
@@ -115,6 +130,8 @@ const spotlights = [
 		image_url: 'https://i.ibb.co/qFxTLVTM/image.png',
 		dominant_color: '#8A54AB',
 		route: '/voter-id-services',
+		type: 'identity',
+		state: null,
 	},
 	{
 		title: 'Get Your RTO Services Easily',
@@ -123,6 +140,8 @@ const spotlights = [
 		image_url: 'https://i.ibb.co/d4dJ3dT2/image.png',
 		dominant_color: '#136B2D',
 		route: '/rto-services',
+		type: 'for_you',
+		state: null,
 	}
 ]
 
@@ -134,8 +153,28 @@ router.get('/quick_categories', (_req, res) => {
 	res.json(quickCategories)
 })
 
-router.get('/spotlight', (_req, res) => {
-	res.json(spotlights)
+router.get('/spotlight', (req, res) => {
+	const requestedType = typeof req.query.type === 'string' ? req.query.type : undefined
+	const requestedState = typeof req.query.state === 'string' && req.query.state !== 'null'
+		? req.query.state
+		: null
+	const spotlightTypes: SpotlightType[] = ['for_you', 'anganwadi', 'scholarship', 'identity']
+
+	if (requestedType && !spotlightTypes.includes(requestedType as SpotlightType)) {
+		res.status(400).json({
+			message: `type must be one of: ${spotlightTypes.join(', ')}`,
+		})
+		return
+	}
+
+	const filteredSpotlights = spotlights.filter((spotlight) => {
+		const matchesType = !requestedType || requestedType === 'for_you' || spotlight.type === requestedType
+		const matchesState = !requestedState || spotlight.state === null || spotlight.state === requestedState
+
+		return matchesType && matchesState
+	})
+
+	res.json(filteredSpotlights)
 })
 
 router.get('/home_config', requireStateHeader, (req, res) => {
