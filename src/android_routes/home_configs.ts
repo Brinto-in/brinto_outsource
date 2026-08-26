@@ -1,5 +1,6 @@
 import express from 'express'
 import db from '../lib/db.js'
+import { defaultAdmitCards } from './job_admit_card_section_data.js'
 import { defaultAnswerKeys } from './job_answer_key_section_data.js'
 import { defaultCutOffs } from './job_cut_off_section_data.js'
 import { defaultResults } from './job_result_section_data.js'
@@ -62,6 +63,13 @@ router.get('/job-answer-key-section', (_req, res) => {
 	res.json({
 		isVisibleSection: false,
 		answerKeys: defaultAnswerKeys,
+	})
+})
+
+router.get('/job-admit-card-section', (_req, res) => {
+	res.json({
+		isVisibleSection: true,
+		admitCards: defaultAdmitCards,
 	})
 })
 
