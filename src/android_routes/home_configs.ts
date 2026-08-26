@@ -4,47 +4,13 @@ import { defaultAdmitCards } from './job_admit_card_section_data.js'
 import { defaultAnswerKeys } from './job_answer_key_section_data.js'
 import { defaultCutOffs } from './job_cut_off_section_data.js'
 import { defaultResults } from './job_result_section_data.js'
+import { popularServices } from './popular_services_data.js'
+import { quickCategories } from './quick_categories_data.js'
 import { filterOptions, scholarships } from './scholarship_section_data.js'
+import { states } from './states_data.js'
 import { spotlights, type SpotlightType } from './spotlight_data.js'
 
 const router = express.Router()
-
-const stateNames = [
-	'Andhra Pradesh',
-	'Arunachal Pradesh',
-	'Assam',
-	'Bihar',
-	'Chhattisgarh',
-	'Goa',
-	'Gujarat',
-	'Haryana',
-	'Himachal Pradesh',
-	'Jharkhand',
-	'Karnataka',
-	'Kerala',
-	'Madhya Pradesh',
-	'Maharashtra',
-	'Manipur',
-	'Meghalaya',
-	'Mizoram',
-	'Nagaland',
-	'Odisha',
-	'Punjab',
-	'Rajasthan',
-	'Sikkim',
-	'Tamil Nadu',
-	'Telangana',
-	'Tripura',
-	'Uttar Pradesh',
-	'Uttarakhand',
-	'West Bengal',
-]
-
-const states = stateNames.map((name, index) => ({
-	id: index + 1,
-	name,
-	imageUrl: `https://placehold.co/600x400/png?text=${encodeURIComponent(name)}`,
-}))
 
 router.get('/job-result-section', (_req, res) => {
 	res.json({
@@ -73,52 +39,6 @@ router.get('/job-admit-card-section', (_req, res) => {
 		admitCards: defaultAdmitCards,
 	})
 })
-
-const popularServices = [
-	{
-		label: 'PAN Card',
-		imageUrl:
-			'https://blog.brinto.in/brinto/pan.png',
-	},
-	{
-		label: 'RTO',
-		imageUrl:
-			'https://blog.brinto.in/brinto/rto.png',
-	},
-	{
-		label: 'Scholarships',
-		imageUrl:
-			'https://blog.brinto.in/brinto/scholarships.png',
-	},
-	{
-		label: 'Anganwadi',
-		imageUrl:
-			'https://blog.brinto.in/brinto/anganwadi.png',
-	},
-	{
-		label: 'Tahasil',
-		imageUrl:
-			'https://blog.brinto.in/brinto/tahasil.png',
-	},
-	{
-		label: 'Near Me',
-		imageUrl:
-			'https://blog.brinto.in/brinto/nearme.png',
-	},
-	{
-		label: 'Feeds',
-		imageUrl:
-			'https://blog.brinto.in/brinto/feeds.png',
-	},
-	{
-		label: 'Voter ID',
-		imageUrl: 'https://blog.brinto.in/brinto/voter_id.png',
-	},
-]
-
-const quickCategories = [
-	{ label: 'For You', icon: 'auto_awesome_rounded' },
-]
 
 router.get('/scholarship-section-data', (_req, res) => {
 	res.json({
