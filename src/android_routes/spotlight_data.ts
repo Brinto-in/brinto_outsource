@@ -92,7 +92,7 @@ export const spotlights: Spotlight[] = [
 		badge: 'Odisha State Scholarship Portal',
 		image_url: 'https://blog.brinto.in/brinto/Banishree_scholarship_applicatio_202608261636.jpeg',
 		dominant_color: '#169CD6',
-		type: 'anganwadi',
+		type: 'scholarship',
 		state: null,
 		slug: 'scholarship'
 	},
