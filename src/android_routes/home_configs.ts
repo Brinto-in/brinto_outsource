@@ -1,5 +1,6 @@
 import express from 'express'
 import db from '../lib/db.js'
+import { defaultCutOffs } from './job_cut_off_section_data.js'
 import { defaultResults } from './job_result_section_data.js'
 import { filterOptions, scholarships } from './scholarship_section_data.js'
 
@@ -46,6 +47,13 @@ router.get('/job-result-section', (_req, res) => {
 	res.json({
 		isVisibleSection: true,
 		results: defaultResults,
+	})
+})
+
+router.get('/job-cut-off-section', (_req, res) => {
+	res.json({
+		isVisibleSection: true,
+		cutOffs: defaultCutOffs,
 	})
 })
 
