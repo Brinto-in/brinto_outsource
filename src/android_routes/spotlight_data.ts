@@ -59,7 +59,7 @@ export const spotlights: Spotlight[] = [
 		title: 'Get Your RTO Services Easily',
 		subtitle: 'Apply for vehicle registration or make corrections.',
 		badge: 'Anganwadi',
-		image_url: 'https://blog.brinto.in/brinto/anaganwadi_2026_08_26_02_04_36.jpeg',
+		image_url: 'https://blog.brinto.in/brinto/Woman_holding_documents_for_recr%E2%80%A6_202608261412.jpeg',
 		dominant_color: '#169CD6',
 		type: 'anganwadi',
 		state: null,
