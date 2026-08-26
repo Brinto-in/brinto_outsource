@@ -65,5 +65,15 @@ export const spotlights: Spotlight[] = [
 		state: null,
 		slug: 'anganwadi'
 	},
+	{
+		title: 'Anganwadi UP',
+		subtitle: 'Odisha Anganwadi Services for children and mothers.',
+		badge: 'Anganwadi',
+		image_url: 'https://blog.brinto.in/brinto/up_anganwadi_2026_08_26_02_28_20.jpeg',
+		dominant_color: '#169CD6',
+		type: 'anganwadi',
+		state: null,
+		slug: 'anganwadi'
+	},
 	
 ]
