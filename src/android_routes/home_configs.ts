@@ -1,5 +1,6 @@
 import express from 'express'
 import db from '../lib/db.js'
+import { defaultResults } from './job_result_section_data.js'
 import { filterOptions, scholarships } from './scholarship_section_data.js'
 
 const router = express.Router()
@@ -40,6 +41,13 @@ const states = stateNames.map((name, index) => ({
 	name,
 	imageUrl: `https://placehold.co/600x400/png?text=${encodeURIComponent(name)}`,
 }))
+
+router.get('/job-result-section', (_req, res) => {
+	res.json({
+		isVisibleSection: true,
+		results: defaultResults,
+	})
+})
 
 const popularServices = [
 	{
