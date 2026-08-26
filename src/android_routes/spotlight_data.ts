@@ -56,10 +56,10 @@ export const spotlights: Spotlight[] = [
 		slug: 'junior-associates-sbi-6a8ea29fa0a6ba64feff6fd7'
 	},
 	{
-		title: 'Get Your RTO Services Easily',
-		subtitle: 'Apply for vehicle registration or make corrections.',
+		title: 'Anganwadi Services',
+		subtitle: 'Odisha Anganwadi Services for children and mothers.',
 		badge: 'Anganwadi',
-		image_url: 'https://blog.brinto.in/brinto/Woman_holding_documents_for_recr%E2%80%A6_202608261412.jpeg',
+		image_url: 'https://blog.brinto.in/brinto/odisha_anganwadi_2026_08_26_02_24_31.jpeg',
 		dominant_color: '#169CD6',
 		type: 'anganwadi',
 		state: null,
