@@ -5,6 +5,7 @@ import { defaultAnswerKeys } from './job_answer_key_section_data.js'
 import { defaultCutOffs } from './job_cut_off_section_data.js'
 import { defaultResults } from './job_result_section_data.js'
 import { filterOptions, scholarships } from './scholarship_section_data.js'
+import { spotlights, type SpotlightType } from './spotlight_data.js'
 
 const router = express.Router()
 
@@ -126,52 +127,6 @@ router.get('/scholarship-section-data', (_req, res) => {
 		scholarships,
 	})
 })
-
-type SpotlightType = 'for_you' | 'anganwadi' | 'scholarship' | 'identity'
-
-interface Spotlight {
-	title: string
-	subtitle: string
-	badge: string
-	image_url: string
-	dominant_color: string
-	route: string
-	type: SpotlightType
-	state: string | null
-}
-
-const spotlights: Spotlight[] = [
-	{
-		title: 'Get Your PAN Card Easily',
-		subtitle: 'Apply for a new PAN or make corrections.',
-		badge: 'PAN CARD',
-		image_url: 'https://i.ibb.co/CKZNFKzN/image.png',
-		dominant_color: '#36ABAA',
-		route: '/pan-services',
-		type: 'identity',
-		state: null,
-	},
-	{
-		title: 'Get Your Voter ID Easily',
-		subtitle: 'Apply for a new Voter ID or make corrections.',
-		badge: 'VOTER ID',
-		image_url: 'https://i.ibb.co/qFxTLVTM/image.png',
-		dominant_color: '#8A54AB',
-		route: '/voter-id-services',
-		type: 'identity',
-		state: null,
-	},
-	{
-		title: 'Get Your RTO Services Easily',
-		subtitle: 'Apply for vehicle registration or make corrections.',
-		badge: 'RTO',
-		image_url: 'https://i.ibb.co/d4dJ3dT2/image.png',
-		dominant_color: '#136B2D',
-		route: '/rto-services',
-		type: 'for_you',
-		state: null,
-	}
-]
 
 router.get('/states', (_req, res) => {
 	res.json(states)
