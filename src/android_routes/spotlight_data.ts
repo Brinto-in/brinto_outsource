@@ -59,7 +59,7 @@ export const spotlights: Spotlight[] = [
 		title: 'Anganwadi Services',
 		subtitle: 'Odisha Anganwadi Services for children and mothers.',
 		badge: 'Anganwadi',
-		image_url: 'https://blog.brinto.in/brinto/odisha_anganwadi_2026_08_26_02_24_31.jpeg',
+		image_url: 'https://blog.brinto.in/brinto/odisha_anganwadi_2026_08_26_2_44_21.jpeg',
 		dominant_color: '#169CD6',
 		type: 'anganwadi',
 		state: null,
