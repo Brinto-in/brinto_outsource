@@ -68,7 +68,7 @@ router.get('/job-answer-key-section', (_req, res) => {
 
 router.get('/job-admit-card-section', (_req, res) => {
 	res.json({
-		isVisibleSection: false,
+		isVisibleSection: true,
 		admitCards: defaultAdmitCards,
 	})
 })
