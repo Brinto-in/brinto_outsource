@@ -45,7 +45,7 @@ export const spotlights: Spotlight[] = [
     {
 		title: 'Get Your RTO Services Easily',
 		subtitle: 'Apply for vehicle registration or make corrections.',
-		badge: 'RTO',
+		badge: 'SBI',
 		image_url: 'https://blog.brinto.in/brinto/Junior_Associate_job_application%E2%80%A6_202608261310.jpeg',
 		dominant_color: '#0D2660',
 		route: '/rto-services',
