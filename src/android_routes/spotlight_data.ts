@@ -96,7 +96,14 @@ export const spotlights: Spotlight[] = [
 		state: null,
 		slug: 'scholarship'
 	},
-
-	
-	
+	{
+		title: 'Anganwadi UP',
+		subtitle: 'Odisha Anganwadi Services for children and mothers.',
+		badge: 'Odisha State Scholarship Portal',
+		image_url: 'https://blog.brinto.in/brinto/Nirman_shramik_kalyan_yojana_sch%E2%80%A6_202608261708.jpeg',
+		dominant_color: '#169CD6',
+		type: 'scholarship',
+		state: null,
+		slug: 'scholarship'
+	},	
 ]
