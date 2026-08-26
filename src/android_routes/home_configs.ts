@@ -47,28 +47,28 @@ const states = stateNames.map((name, index) => ({
 
 router.get('/job-result-section', (_req, res) => {
 	res.json({
-		isVisibleSection: false,
+		isVisibleSection: true,
 		results: defaultResults,
 	})
 })
 
 router.get('/job-cut-off-section', (_req, res) => {
 	res.json({
-		isVisibleSection: false,
+		isVisibleSection: true,
 		cutOffs: defaultCutOffs,
 	})
 })
 
 router.get('/job-answer-key-section', (_req, res) => {
 	res.json({
-		isVisibleSection: false,
+		isVisibleSection: true,
 		answerKeys: defaultAnswerKeys,
 	})
 })
 
 router.get('/job-admit-card-section', (_req, res) => {
 	res.json({
-		isVisibleSection: false,
+		isVisibleSection: true,
 		admitCards: defaultAdmitCards,
 	})
 })
@@ -121,7 +121,7 @@ const quickCategories = [
 
 router.get('/scholarship-section-data', (_req, res) => {
 	res.json({
-		isVisibleSection: false,
+		isVisibleSection: true,
 		filterOptions,
 		scholarships,
 	})
