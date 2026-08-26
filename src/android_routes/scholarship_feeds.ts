@@ -3,6 +3,21 @@ import db from '../lib/db.js'
 
 const router = express.Router()
 
+let educationLevelsCache: Promise<unknown[]> | null = null
+
+const getEducationLevels = async () => {
+	if (!educationLevelsCache) {
+		educationLevelsCache = db.execute(
+			'SELECT id, name FROM education_levels WHERE is_active = 1 ORDER BY display_order ASC',
+		).then((result) => result.rows).catch((error) => {
+			educationLevelsCache = null
+			throw error
+		})
+	}
+
+	return educationLevelsCache
+}
+
 const scholarshipEducationLevels = [
 	'class1to8',
 	'class9to10',
@@ -173,12 +188,10 @@ router.get('/scholarships/providers', async (req, res) => {
 
 router.get('/scholarships/education-levels', async (_req, res) => {
 	try {
-		const result = await db.execute(
-			'SELECT id, name FROM education_levels WHERE is_active = 1 ORDER BY display_order ASC',
-		)
+		const levels = await getEducationLevels()
 
 		res.json({
-			levels: result.rows,
+			levels,
 		})
 	} catch (error: any) {
 		res.status(500).json({
