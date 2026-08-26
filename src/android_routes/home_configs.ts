@@ -46,21 +46,21 @@ const states = stateNames.map((name, index) => ({
 
 router.get('/job-result-section', (_req, res) => {
 	res.json({
-		isVisibleSection: true,
+		isVisibleSection: false,
 		results: defaultResults,
 	})
 })
 
 router.get('/job-cut-off-section', (_req, res) => {
 	res.json({
-		isVisibleSection: true,
+		isVisibleSection: false,
 		cutOffs: defaultCutOffs,
 	})
 })
 
 router.get('/job-answer-key-section', (_req, res) => {
 	res.json({
-		isVisibleSection: true,
+		isVisibleSection: false,
 		answerKeys: defaultAnswerKeys,
 	})
 })
