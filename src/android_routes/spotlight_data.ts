@@ -34,16 +34,6 @@ export const spotlights: Spotlight[] = [
 		type: 'identity',
 		state: null,
 	},
-	{
-		title: 'Get Your RTO Services Easily',
-		subtitle: 'Apply for vehicle registration or make corrections.',
-		badge: 'RTO',
-		image_url: 'https://i.ibb.co/d4dJ3dT2/image.png',
-		dominant_color: '#136B2D',
-		route: '/rto-services',
-		type: 'for_you',
-		state: null,
-	},
     {
 		title: 'Get Your RTO Services Easily',
 		subtitle: 'Apply for vehicle registration or make corrections.',
