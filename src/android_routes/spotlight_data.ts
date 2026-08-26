@@ -6,7 +6,7 @@ export interface Spotlight {
 	badge: string
 	image_url: string
 	dominant_color: string
-	route: string
+	route?: string
 	type: SpotlightType
 	state: string | null
 	slug?: string
@@ -55,4 +55,15 @@ export const spotlights: Spotlight[] = [
 		state: null,
 		slug: 'junior-associates-sbi-6a8ea29fa0a6ba64feff6fd7'
 	},
+	{
+		title: 'Get Your RTO Services Easily',
+		subtitle: 'Apply for vehicle registration or make corrections.',
+		badge: 'Anganwadi',
+		image_url: 'https://blog.brinto.in/brinto/anaganwadi_2026_08_26_02_04_36.jpeg',
+		dominant_color: '#169CD6',
+		type: 'anganwadi',
+		state: null,
+		slug: 'anganwadi'
+	},
+	
 ]
