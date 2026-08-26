@@ -9,6 +9,7 @@ export interface Spotlight {
 	route: string
 	type: SpotlightType
 	state: string | null
+	slug?: string
 }
 
 export const spotlights: Spotlight[] = [
@@ -21,6 +22,7 @@ export const spotlights: Spotlight[] = [
 		route: '/pan-services',
 		type: 'identity',
 		state: null,
+
 	},
 	{
 		title: 'Get Your Voter ID Easily',
@@ -51,5 +53,6 @@ export const spotlights: Spotlight[] = [
 		route: '/rto-services',
 		type: 'for_you',
 		state: null,
+		slug: 'junior-associates-sbi-6a8ea29fa0a6ba64feff6fd7'
 	},
 ]
