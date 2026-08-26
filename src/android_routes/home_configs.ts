@@ -89,7 +89,7 @@ const quickCategories = [
 
 router.get('/scholarship-section-data', (_req, res) => {
 	res.json({
-		isVisibleSection: true,
+		isVisibleSection: false,
 		filterOptions,
 		scholarships,
 	})
