@@ -17,7 +17,7 @@ export const spotlights: Spotlight[] = [
 		title: 'Get Your PAN Card Easily',
 		subtitle: 'Apply for a new PAN or make corrections.',
 		badge: 'PAN CARD',
-		image_url: 'https://i.ibb.co/CKZNFKzN/image.png',
+		image_url: 'https://blog.brinto.in/brinto/PAN_card_application_service_banner_202608261648.jpeg',
 		dominant_color: '#36ABAA',
 		route: '/pan-services',
 		type: 'identity',
