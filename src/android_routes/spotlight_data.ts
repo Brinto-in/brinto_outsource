@@ -54,6 +54,17 @@ export const spotlights: Spotlight[] = [
 		type: 'identity',
 		state: null,
 	},
+	{
+		title: 'India Post GDS Recruitment 2026',
+		subtitle: 'Gramin Dak Sevak Online Engagement – Schedule-II, July 2026.',
+		badge: 'GDS',
+		image_url: 'https://blog.brinto.in/brinto/Gramin_Dak_Sevak_recruitment_banner_202608271146.jpeg',
+		dominant_color: '#D71920',
+		route: '/gds-recruitment',
+		type: 'for_you',
+		state: 'Odisha',
+		slug: 'gramin-dak-sevak-gds-july-2026'
+	},
     {
 		title: 'Get Your RTO Services Easily',
 		subtitle: 'Apply for vehicle registration or make corrections.',
@@ -105,5 +116,5 @@ export const spotlights: Spotlight[] = [
 		type: 'scholarship',
 		state: null,
 		slug: 'scholarship'
-	},	
+	},
 ]
