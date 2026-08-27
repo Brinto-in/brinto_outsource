@@ -1,5 +1,6 @@
 import express from 'express'
 import db from '../lib/db.js'
+import { loadSessionState, StateRequest } from '../middleware/state.js'
 
 const router = express.Router()
 
@@ -27,33 +28,6 @@ const scholarshipEducationLevels = [
 	'pg',
 ] as const
 
-const getSessionState = async (req: express.Request, res: express.Response) => {
-	const sessionId = req.get('session_id')?.trim()
-
-	if (!sessionId) {
-		return null
-	}
-
-	const result = await db.execute({
-		sql: `SELECT state_name
-			FROM user_states
-			WHERE session_id = ?
-			LIMIT 1`,
-		args: [sessionId],
-	})
-
-	const stateName = result.rows[0]?.state_name
-	if (typeof stateName !== 'string' || !stateName.trim()) {
-		res.status(404).json({
-			success: false,
-			message: 'Session not found.',
-		})
-		return undefined
-	}
-
-	return stateName.trim().toLowerCase()
-}
-
 const sendScholarships = async (
 	req: express.Request,
 	res: express.Response,
@@ -61,10 +35,7 @@ const sendScholarships = async (
 	closingSoon = false,
 	location?: string,
 ) => {
-	const requestedState = closingSoon || category === 'corporate' || location
-		? null
-		: await getSessionState(req, res)
-	if (requestedState === undefined) return
+	const requestedState = closingSoon || category === 'corporate' || location ? null : (req as StateRequest).sessionState ?? null
 
 	const eduLevel = typeof req.query.eduLevel === 'string' ? req.query.eduLevel : undefined
 	const pageValue = typeof req.query.page === 'string' ? Number.parseInt(req.query.page, 10) : 1
@@ -225,7 +196,7 @@ router.get('/scholarships/national', async (req, res) => {
 	}
 })
 
-router.get('/scholarships/state-specific', async (req, res) => {
+router.get('/scholarships/state-specific', loadSessionState, async (req, res) => {
 	try {
 		await sendScholarships(req, res)
 	} catch (error: any) {
