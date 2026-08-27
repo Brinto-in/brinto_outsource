@@ -74,7 +74,7 @@ router.get('/spotlight', loadSessionState, (req, res) => {
 	const filteredSpotlights = spotlights.filter((spotlight) => {
 		const matchesType = !requestedType || spotlight.type === requestedType
 		const matchesState = requestedState
-			? spotlight.state === null || spotlight.state === requestedState
+			? spotlight.state === null || spotlight.state.toLowerCase() === requestedState.toLowerCase()
 			: spotlight.state === null
 
 		return matchesType && matchesState
