@@ -60,6 +60,8 @@ router.get('/quick_categories', (_req, res) => {
 router.get('/spotlight', loadSessionState, (req, res) => {
 	const requestedType = typeof req.query.type === 'string' ? req.query.type : undefined
 	const requestedState = (req as StateRequest).sessionState ?? null
+	console.log(requestedType, requestedState);
+	
 	const spotlightTypes: SpotlightType[] = ['for_you', 'anganwadi', 'scholarship', 'identity']
 
 	if (requestedType && !spotlightTypes.includes(requestedType as SpotlightType)) {
