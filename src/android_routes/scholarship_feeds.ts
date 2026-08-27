@@ -19,15 +19,6 @@ const getEducationLevels = async () => {
 	return educationLevelsCache
 }
 
-const scholarshipEducationLevels = [
-	'class1to8',
-	'class9to10',
-	'class11to12',
-	'diploma',
-	'ug',
-	'pg',
-] as const
-
 const sendScholarships = async (
 	req: express.Request,
 	res: express.Response,
@@ -115,6 +106,83 @@ const sendScholarships = async (
 		})),
 	})
 }
+
+router.get('/scholarships', loadSessionState, async (req, res) => {
+	try {
+		const title = typeof req.query.title === 'string' ? req.query.title.trim() : ''
+		const organization = typeof req.query.organization === 'string' ? req.query.organization.trim() : ''
+		const educationLevel = typeof req.query.education_level === 'string' ? req.query.education_level.trim() : ''
+		const pageValue = typeof req.query.page === 'string' ? Number.parseInt(req.query.page, 10) : 1
+		const limitValue = typeof req.query.limit === 'string' ? Number.parseInt(req.query.limit, 10) : 20
+		const page = Number.isInteger(pageValue) && pageValue > 0 ? pageValue : 1
+		const limit = Number.isInteger(limitValue) && limitValue > 0 ? Math.min(limitValue, 100) : 20
+		const conditions = ['1 = 1']
+		const args: string[] = []
+		const sessionState = (req as StateRequest).sessionState
+
+		if (sessionState) {
+			conditions.push('(s.location IS NULL OR LOWER(s.location) IN (?, ?))')
+			args.push('india', sessionState)
+		} else {
+			conditions.push('(s.location IS NULL OR LOWER(s.location) = ?)')
+			args.push('india')
+		}
+
+		if (title) {
+			conditions.push('LOWER(s.title) LIKE LOWER(?)')
+			args.push(`%${title}%`)
+		}
+		if (organization) {
+			conditions.push('LOWER(s.organization) LIKE LOWER(?)')
+			args.push(`%${organization}%`)
+		}
+		if (educationLevel) {
+			conditions.push('s.education_level = ?')
+			args.push(educationLevel)
+		}
+
+		const whereClause = conditions.join(' AND ')
+		const [countResult, scholarshipsResult] = await Promise.all([
+			db.execute({
+				sql: `SELECT COUNT(*) AS total FROM scholarships s WHERE ${whereClause}`,
+				args,
+			}),
+			db.execute({
+				sql: `SELECT s.id, s.slug, s.title, s.organization,
+					s.category, s.amount, s.last_date AS lastDate,
+					s.label AS tagLabel, s.color_hex AS tagColorHex
+				FROM scholarships s
+				WHERE ${whereClause}
+				ORDER BY s.last_date ASC, s.id ASC
+				LIMIT ? OFFSET ?`,
+				args: [...args, limit, (page - 1) * limit],
+			}),
+		])
+
+		res.json({
+			meta: {
+				total: Number(countResult.rows[0]?.total ?? 0),
+				page,
+				limit,
+			},
+			scholarships: scholarshipsResult.rows.map((scholarship) => ({
+				id: scholarship.id,
+				slug: scholarship.slug,
+				title: scholarship.title,
+				organization: scholarship.organization,
+				category: scholarship.category,
+				amount: scholarship.amount,
+				lastDate: scholarship.lastDate,
+				tag: {
+					label: scholarship.tagLabel,
+					colorHex: scholarship.tagColorHex,
+				},
+			})),
+		})
+	} catch (error: any) {
+		res.status(500).json({ message: 'Failed to fetch scholarships', error: error.message })
+	}
+})
 
 router.get('/scholarships/providers', async (req, res) => {
 	try {
