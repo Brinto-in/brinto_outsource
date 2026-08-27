@@ -87,7 +87,7 @@ export const spotlights: Spotlight[] = [
 		"state": "Odisha",
 		"slug": "opsc-assistant-public-prosecutor-recruitment-2026"
 	},
-    {
+	{
 		title: 'Get Your RTO Services Easily',
 		subtitle: 'Apply for vehicle registration or make corrections.',
 		badge: 'SBI',
@@ -97,6 +97,17 @@ export const spotlights: Spotlight[] = [
 		type: 'for_you',
 		state: null,
 		slug: 'junior-associates-sbi-6a8ea29fa0a6ba64feff6fd7'
+	},
+	{
+		"title": "OPSC AEE Recruitment 2026",
+		"subtitle": "Apply Online for 46 Assistant Executive Engineer Posts",
+		"badge": "OPSC",
+		"image_url": "https://blog.brinto.in/brinto/OPSC_AEE_recruitment_banner_202608271247.jpeg",
+		"dominant_color": "#1F3A5F",
+		"route": "/opsc-aee-recruitment",
+		"type": "for_you",
+		"state": "Odisha",
+		"slug": "opsc-assistant-executive-engineer-recruitment-2026"
 	},
 	{
 		title: 'Anganwadi Services',
