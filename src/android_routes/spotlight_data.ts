@@ -76,6 +76,17 @@ export const spotlights: Spotlight[] = [
 		"state": null,
 		"slug": "east-coast-railway-act-apprentice-recruitment-2026"
 	},
+	{
+		"title": "OPSC APP Recruitment 2026",
+		"subtitle": "Apply Online for 172 Assistant Public Prosecutor Posts",
+		"badge": "OPSC",
+		"image_url": "https://blog.brinto.in/brinto/OPSC_recruitment_2026_banner_202608271233.jpeg",
+		"dominant_color": "#0B182B",
+		"route": "/opsc-app-recruitment",
+		"type": "for_you",
+		"state": "Odisha",
+		"slug": "opsc-assistant-public-prosecutor-recruitment-2026"
+	},
     {
 		title: 'Get Your RTO Services Easily',
 		subtitle: 'Apply for vehicle registration or make corrections.',
