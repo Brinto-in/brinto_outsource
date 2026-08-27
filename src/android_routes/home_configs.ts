@@ -9,6 +9,7 @@ import { quickCategories } from './quick_categories_data.js'
 import { filterOptions, scholarships } from './scholarship_section_data.js'
 import { states } from './states_data.js'
 import { spotlights, type SpotlightType } from './spotlight_data.js'
+import { loadSessionState, StateRequest } from '../middleware/state.js'
 
 const router = express.Router()
 
@@ -56,11 +57,9 @@ router.get('/quick_categories', (_req, res) => {
 	res.json(quickCategories)
 })
 
-router.get('/spotlight', (req, res) => {
+router.get('/spotlight', loadSessionState, (req, res) => {
 	const requestedType = typeof req.query.type === 'string' ? req.query.type : undefined
-	const requestedState = typeof req.query.state === 'string' && req.query.state !== 'null'
-		? req.query.state
-		: null
+	const requestedState = (req as StateRequest).sessionState ?? null
 	const spotlightTypes: SpotlightType[] = ['for_you', 'anganwadi', 'scholarship', 'identity']
 
 	if (requestedType && !spotlightTypes.includes(requestedType as SpotlightType)) {
