@@ -65,6 +65,17 @@ export const spotlights: Spotlight[] = [
 		state: 'Odisha',
 		slug: 'gramin-dak-sevak-gds-july-2026'
 	},
+	{
+		"title": "East Coast Railway Act Apprentice Recruitment 2026",
+		"subtitle": "Apply Online for 1,599 Apprentice Posts",
+		"badge": "RAILWAY",
+		"image_url": "https://blog.brinto.in/brinto/Railway_apprentice_recruitment_b%E2%80%A6_202608271222.jpeg",
+		"dominant_color": "#0B0A0B",
+		"route": "/railway-apprentice-recruitment",
+		"type": "for_you",
+		"state": null,
+		"slug": "east-coast-railway-act-apprentice-recruitment-2026"
+	},
     {
 		title: 'Get Your RTO Services Easily',
 		subtitle: 'Apply for vehicle registration or make corrections.',
