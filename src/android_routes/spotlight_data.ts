@@ -116,7 +116,7 @@ export const spotlights: Spotlight[] = [
 		image_url: 'https://blog.brinto.in/brinto/odisha_anganwadi_2026_08_26_2_44_21.jpeg',
 		dominant_color: '#169CD6',
 		type: 'anganwadi',
-		state: null,
+		state: "Odisha",
 		slug: 'anganwadi'
 	},
 	{
@@ -126,7 +126,7 @@ export const spotlights: Spotlight[] = [
 		image_url: 'https://blog.brinto.in/brinto/up_anganwadi_2026_08_26_02_49_13.jpeg',
 		dominant_color: '#169CD6',
 		type: 'anganwadi',
-		state: null,
+		state: "uttar pradesh",
 		slug: 'anganwadi'
 	},
 
