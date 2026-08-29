@@ -165,7 +165,7 @@ router.get('/state-session', optionalVerifyToken, async (req: AuthRequest, res) 
       });
     }
 
-    const stateName = result.rows[0].state_name
+    const stateName = result.rows[0].state_name as string
 
     // Store in cache
     sessionCache.set(sessionId, {
