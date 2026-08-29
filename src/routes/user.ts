@@ -8,7 +8,7 @@ const router = Router();
 
 // Simple in-memory cache for session state queries with TTL
 interface SessionCacheEntry {
-	stateName: string
+	stateName: string | null
 	expiresAt: number
 }
 
@@ -25,8 +25,6 @@ setInterval(() => {
 	}
 }, 10 * 60 * 1000) // Clean up every 10 minutes
 
-const router = Router();
-
 /**
  * Get user details by user_id from token
  * GET /api/user/details
@@ -40,31 +38,8 @@ router.get('/details', verifyToken, async (req: AuthRequest, res) => {
       data: {
         user_id,
         user_name,
-        // ...result.rows[0],
       },
     });
-
-    // Query user details from database
-    // const result = await db.execute({
-    //   sql: 'SELECT * FROM users WHERE id = ?',
-    //   args: [user_id],
-    // });
-
-    // if (result.rows.length === 0) {
-    //   return res.status(404).json({
-    //     success: false,
-    //     message: 'User not found',
-    //   });
-    // }
-
-    // res.json({
-    //   success: true,
-    //   data: {
-    //     user_id,
-    //     user_name,
-    //     ...result.rows[0],
-    //   },
-    // });
   } catch (error: any) {
     res.status(500).json({
       success: false,
@@ -84,8 +59,6 @@ router.post('/state-session', optionalVerifyToken, async (req: AuthRequest, res)
     const userId = req.user?.user_id ?? null;
     const { state_name } = req.body;
     const sessionIdHeader = req.get('session_id')?.trim();
-    console.log(userId, state_name, sessionIdHeader);
-    
 
     if (typeof state_name !== 'string' || !state_name.trim()) {
       return res.status(400).json({
@@ -214,36 +187,10 @@ router.get('/state-session', optionalVerifyToken, async (req: AuthRequest, res) 
 });
 
 /**
- * Update user profile
- * PUT /api/user/profile
- * Requires: Authorization: Bearer <token>
+ * Create a new user
+ * POST /api/user/users
+ * Body: { username: string, phone: string, email?: string, role?: string }
  */
-// router.put('/profile', verifyToken, async (req: AuthRequest, res) => {
-//   try {
-//     const { user_id } = req.user!;
-//     const { name, email, phone } = req.body;
-
-//     // Update user in database
-//     const result = await db.execute({
-//       sql: 'UPDATE users SET name = ?, email = ?, phone = ? WHERE id = ?',
-//       args: [name, email, phone, user_id],
-//     });
-
-//     res.json({
-//       success: true,
-//       message: 'User profile updated',
-//       data: result,
-//     });
-//   } catch (error: any) {
-//     res.status(500).json({
-//       success: false,
-//       message: 'Failed to update user profile',
-//       error: error.message,
-//     });
-//   }
-// });
-
-
 router.post('/users', async (req, res) => {
   try {
     const { username, phone, email = null, role = 'student' } = req.body;
