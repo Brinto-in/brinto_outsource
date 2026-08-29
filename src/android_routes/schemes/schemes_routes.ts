@@ -37,7 +37,6 @@ router.get('/', (req: StateRequest, res: Response) => {
 			'Women & Youth',
 			'Health (BSKY)',
 			'Pension',
-			'state',
 		]
 		const query = req.query as SchemeQuery
 		const ITEMS_PER_PAGE = 3
