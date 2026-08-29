@@ -11,6 +11,7 @@ import testRoutes from './routes/test.js'
 import attemptsRoutes from './routes/attempts.js'
 import homeConfigRoutes from './android_routes/home_configs.js'
 import scholarshipFeedsRoutes from './android_routes/scholarship_feeds.js'
+import schemesRoutes from './android_routes/schemes/schemes_routes.js'
 import { requireApiVersion } from './middleware/api_version.js'
 
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
@@ -59,6 +60,9 @@ app.use('/api/attempts', attemptsRoutes)
 // Android home configuration
 app.use('/api/android', requireApiVersion, homeConfigRoutes)
 app.use('/api/android', requireApiVersion, scholarshipFeedsRoutes)
+
+// Schemes routes with state middleware
+app.use('/api/schemes', schemesRoutes)
 
 // SAMS Cutoff
 app.post('/sams-cutoff-deg', async (req, res) => {
