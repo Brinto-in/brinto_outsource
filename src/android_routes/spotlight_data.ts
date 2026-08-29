@@ -19,10 +19,9 @@ export const spotlights: Spotlight[] = [
 		badge: 'PAN CARD',
 		image_url: 'https://blog.brinto.in/brinto/PAN_card_application_service_banner_202608261648.jpeg',
 		dominant_color: '#36ABAA',
-		route: '/pan-services',
 		type: 'identity',
 		state: null,
-
+		slug: 'pan-69354f8d55f23937dc3389c3'
 	},
 	{
 		title: 'Income Certificate Services',
@@ -33,6 +32,7 @@ export const spotlights: Spotlight[] = [
 		route: '/income-certificate-services',
 		type: 'identity',
 		state: null,
+		slug: 'income-certificate-68adbb5e80356552c1e08752'
 	},
 	{
 		title: 'Caste Certificate Services',
@@ -40,9 +40,9 @@ export const spotlights: Spotlight[] = [
 		badge: 'CASTE CERTIFICATE',
 		image_url: 'https://blog.brinto.in/brinto/caste_application_service_banner_202608261655.jpeg',
 		dominant_color: '#8A54AB',
-		route: '/caste-certificate-services',
 		type: 'identity',
 		state: null,
+		slug: 'caste-certificate-68a56e3f5919404d9cf571cb'
 	},
 	{
 		title: 'Resident Certificate Services',
@@ -50,9 +50,9 @@ export const spotlights: Spotlight[] = [
 		badge: 'RESIDENT CERTIFICATE',
 		image_url: 'https://blog.brinto.in/brinto/resident_application_service_banner_202608261654.jpeg',
 		dominant_color: '#8A54AB',
-		route: '/resident-certificate-services',
 		type: 'identity',
 		state: null,
+		slug: 'resident-certificate-68a2bf400db871f4ffff4b52'
 	},
 	{
 		title: 'India Post GDS Recruitment 2026',
