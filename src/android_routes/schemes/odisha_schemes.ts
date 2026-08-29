@@ -25,7 +25,7 @@ export const allOdishaSchemes: StateSchemeItem[] = [
 		badgeText: 'Active • High Demand',
 		badgeColor: '#E11D48',
 		formId: 'subhadra-yojana-2024',
-		slug: 'subhadra-yojana',
+		slug: 'subhadra-yojana-6a92890ea0a6ba64feff744c',
 		state: 'odisha',
 	},
 	{
