@@ -30,6 +30,15 @@ interface SchemeQuery {
  */
 router.get('/', (req: StateRequest, res: Response) => {
 	try {
+		const recommendedTags = [
+			'All',
+			'Subhadra',
+			'Farmers (KALIA)',
+			'Women & Youth',
+			'Health (BSKY)',
+			'Pension',
+			'state',
+		]
 		const query = req.query as SchemeQuery
 		const ITEMS_PER_PAGE = 3
 		const page = Math.max(1, parseInt(query.page || '1', 10))
@@ -43,6 +52,8 @@ router.get('/', (req: StateRequest, res: Response) => {
 				success: true,
 				data: [],
 				total: 0,
+				state: stateFilter,
+				recommendedTags: [],
 				pagination: {
 					page,
 					itemsPerPage: ITEMS_PER_PAGE,
@@ -100,6 +111,8 @@ router.get('/', (req: StateRequest, res: Response) => {
 			success: true,
 			data: paginatedSchemes,
 			total: totalItems,
+			state: stateFilter,
+			recommendedTags,
 			pagination: {
 				page,
 				itemsPerPage: ITEMS_PER_PAGE,
