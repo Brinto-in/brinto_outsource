@@ -6,6 +6,27 @@ import { verifyToken, optionalVerifyToken, AuthRequest, JWT_SECRET } from '../mi
 
 const router = Router();
 
+// Simple in-memory cache for session state queries with TTL
+interface SessionCacheEntry {
+	stateName: string
+	expiresAt: number
+}
+
+const sessionCache = new Map<string, SessionCacheEntry>()
+const SESSION_CACHE_TTL_MS = 60 * 60 * 1000 // 1 hour
+
+// Clean up expired cache entries periodically
+setInterval(() => {
+	const now = Date.now()
+	for (const [key, entry] of sessionCache.entries()) {
+		if (entry.expiresAt <= now) {
+			sessionCache.delete(key)
+		}
+	}
+}, 10 * 60 * 1000) // Clean up every 10 minutes
+
+const router = Router();
+
 /**
  * Get user details by user_id from token
  * GET /api/user/details
@@ -94,6 +115,9 @@ router.post('/state-session', optionalVerifyToken, async (req: AuthRequest, res)
           args: [state_name.trim(), sessionIdHeader],
         });
 
+        // Invalidate cache for this session
+        sessionCache.delete(sessionIdHeader)
+
         return res.json({
           success: true,
           session_id: sessionIdHeader,
@@ -140,6 +164,16 @@ router.get('/state-session', optionalVerifyToken, async (req: AuthRequest, res) 
       });
     }
 
+    // Check cache first
+    const cached = sessionCache.get(sessionId)
+    if (cached && cached.expiresAt > Date.now()) {
+      return res.json({
+        success: true,
+        state_name: cached.stateName,
+      })
+    }
+
+    // Cache miss or expired, query database
     const result = await db.execute({
       sql: `
         SELECT state_name
@@ -158,9 +192,17 @@ router.get('/state-session', optionalVerifyToken, async (req: AuthRequest, res) 
       });
     }
 
+    const stateName = result.rows[0].state_name
+
+    // Store in cache
+    sessionCache.set(sessionId, {
+      stateName,
+      expiresAt: Date.now() + SESSION_CACHE_TTL_MS,
+    })
+
     return res.json({
       success: true,
-      state_name: result.rows[0].state_name,
+      state_name: stateName,
     });
   } catch (error: any) {
     return res.status(500).json({
