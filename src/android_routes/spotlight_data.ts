@@ -63,7 +63,7 @@ export const spotlights: Spotlight[] = [
 		route: '/gds-recruitment',
 		type: 'for_you',
 		state: 'Odisha',
-		slug: 'gramin-dak-sevak-gds-july-2026'
+		slug: 'gramin-dak-sevak-gds-online-engagement-schedule-ii-6a95c3bea0a6ba64feff788e'
 	},
 	{
 		"title": "East Coast Railway Act Apprentice Recruitment 2026",
