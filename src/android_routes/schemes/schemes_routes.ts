@@ -10,7 +10,6 @@ router.use(loadSessionState)
 interface SchemeQuery {
 	title?: string
 	slug?: string
-	state?: string
 	category?: string
 	tag?: string
 	page?: string
@@ -22,7 +21,7 @@ interface SchemeQuery {
  * Query params:
  *   - title: Search by scheme title (substring match)
  *   - slug: Filter by slug (exact match)
- *   - state: Filter by state (defaults to session state from middleware)
+ * State is loaded from the session_id header by middleware.
  *   - category: Filter by category
  *   - tag: Filter by tag
  *   - page: Page number (default: 1, items per page: 3)
@@ -42,8 +41,8 @@ router.get('/', (req: StateRequest, res: Response) => {
 		const ITEMS_PER_PAGE = 3
 		const page = Math.max(1, parseInt(query.page || '1', 10))
 
-		// Filter by state (use query param if provided, otherwise default to session state)
-		const stateFilter = query.state || req.sessionState
+		// State is resolved by middleware from the session_id header.
+		const stateFilter = req.sessionState
 
 		// Return empty array if no state filter provided
 		if (!stateFilter) {
