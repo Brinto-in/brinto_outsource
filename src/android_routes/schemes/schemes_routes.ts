@@ -1,6 +1,6 @@
 import { Router, Response } from 'express'
+import db from '../../lib/db.js'
 import { loadSessionState, StateRequest } from '../../middleware/state.js'
-import { allOdishaSchemes, StateSchemeItem } from './odisha_schemes.js'
 
 const router = Router()
 
@@ -27,7 +27,7 @@ interface SchemeQuery {
  *   - page: Page number (default: 1, items per page: 3)
  * Requires: session_id header (fetches state from database)
  */
-router.get('/', (req: StateRequest, res: Response) => {
+router.get('/', async (req: StateRequest, res: Response) => {
 	try {
 		const recommendedTags = [
 			'All',
@@ -43,7 +43,6 @@ router.get('/', (req: StateRequest, res: Response) => {
 
 		// State is resolved by middleware from the session_id header.
 		const stateFilter = req.sessionState
-		console.log('State Filter:', stateFilter)
 
 		// Return empty array if no state filter provided
 		if (!stateFilter) {
@@ -64,47 +63,46 @@ router.get('/', (req: StateRequest, res: Response) => {
 			})
 		}
 
-		let filteredSchemes: StateSchemeItem[] = [...allOdishaSchemes]
+		const filters: string[] = ['LOWER(state) = LOWER(?)']
+		const args: (string | number)[] = [stateFilter]
 
-		// Filter by state
-		filteredSchemes = filteredSchemes.filter(
-			(scheme) => scheme.state.toLowerCase() === stateFilter.toLowerCase()
-		)
-
-		// Filter by title (substring match)
 		if (query.title) {
-			filteredSchemes = filteredSchemes.filter(
-				(scheme) => scheme.title.toLowerCase().includes((query.title as string).toLowerCase())
-			)
+			filters.push('LOWER(title) LIKE LOWER(?)')
+			args.push(`%${query.title}%`)
 		}
-
-		// Filter by slug (exact match)
 		if (query.slug) {
-			filteredSchemes = filteredSchemes.filter(
-				(scheme) => scheme.slug.toLowerCase() === (query.slug as string).toLowerCase()
-			)
+			filters.push('LOWER(slug) = LOWER(?)')
+			args.push(query.slug)
 		}
-
-		// Filter by category if provided
 		if (query.category) {
-			filteredSchemes = filteredSchemes.filter(
-				(scheme) => scheme.category.toLowerCase() === query.category?.toLowerCase()
-			)
+			filters.push('LOWER(category) = LOWER(?)')
+			args.push(query.category)
 		}
-
-		// Filter by tag if provided
 		if (query.tag) {
-			filteredSchemes = filteredSchemes.filter(
-				(scheme) => scheme.tag.toLowerCase() === query.tag?.toLowerCase()
-			)
+			filters.push('LOWER(tag) = LOWER(?)')
+			args.push(query.tag)
 		}
 
-		// Calculate pagination
-		const totalItems = filteredSchemes.length
+		const whereClause = filters.join(' AND ')
+		const countResult = await db.execute({
+			sql: `SELECT COUNT(*) AS total FROM schemes WHERE ${whereClause}`,
+			args,
+		})
+		const totalItems = Number(countResult.rows[0]?.total ?? 0)
 		const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE)
 		const startIndex = (page - 1) * ITEMS_PER_PAGE
-		const endIndex = startIndex + ITEMS_PER_PAGE
-		const paginatedSchemes = filteredSchemes.slice(startIndex, endIndex)
+		const schemesResult = await db.execute({
+			sql: `SELECT
+				title, subtitle, tag, category, icon, color,
+				bg_color AS bgColor, badge_text AS badgeText,
+				badge_color AS badgeColor, form_id AS formId, slug, state
+			FROM schemes
+			WHERE ${whereClause}
+			ORDER BY id
+			LIMIT ? OFFSET ?`,
+			args: [...args, ITEMS_PER_PAGE, startIndex],
+		})
+		const paginatedSchemes = schemesResult.rows
 
 		return res.status(200).json({
 			success: true,

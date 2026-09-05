@@ -50,6 +50,21 @@ CREATE TABLE users (
 );
 ```
 
+## Schemes Catalog
+
+Create and seed the schemes table from the project root:
+
+```bash
+turso db shell my-database < sql/schemes.sql
+```
+
+The schemes endpoint reads from this table:
+
+```text
+GET /api/schemes
+Header: session_id: <session-id>
+```
+
 ## 4. Using the Database in Your Code
 
 ### Import the database client:
