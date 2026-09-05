@@ -3,27 +3,9 @@ import { randomUUID } from 'crypto';
 import jwt from 'jsonwebtoken';
 import db from '../lib/db.js';
 import { verifyToken, optionalVerifyToken, AuthRequest, JWT_SECRET } from '../middleware/auth.js';
+import { getSessionState, invalidateSessionState } from '../middleware/state.js';
 
 const router = Router();
-
-// Simple in-memory cache for session state queries with TTL
-interface SessionCacheEntry {
-	stateName: string | null
-	expiresAt: number
-}
-
-const sessionCache = new Map<string, SessionCacheEntry>()
-const SESSION_CACHE_TTL_MS = 60 * 60 * 1000 // 1 hour
-
-// Clean up expired cache entries periodically
-setInterval(() => {
-	const now = Date.now()
-	for (const [key, entry] of sessionCache.entries()) {
-		if (entry.expiresAt <= now) {
-			sessionCache.delete(key)
-		}
-	}
-}, 10 * 60 * 1000) // Clean up every 10 minutes
 
 /**
  * Get user details by user_id from token
@@ -89,7 +71,7 @@ router.post('/state-session', optionalVerifyToken, async (req: AuthRequest, res)
         });
 
         // Invalidate cache for this session
-        sessionCache.delete(sessionIdHeader)
+        invalidateSessionState(sessionIdHeader)
 
         return res.json({
           success: true,
@@ -137,41 +119,13 @@ router.get('/state-session', optionalVerifyToken, async (req: AuthRequest, res) 
       });
     }
 
-    // Check cache first
-    const cached = sessionCache.get(sessionId)
-    if (cached && cached.expiresAt > Date.now()) {
-      return res.json({
-        success: true,
-        state_name: cached.stateName,
-      })
-    }
-
-    // Cache miss or expired, query database
-    const result = await db.execute({
-      sql: `
-        SELECT state_name
-        FROM user_states
-        WHERE session_id = ?
-          AND ((user_id = ?) OR (user_id IS NULL AND ? IS NULL))
-        LIMIT 1
-      `,
-      args: [sessionId, userId, userId],
-    });
-
-    if (result.rows.length === 0) {
+    const stateName = await getSessionState(sessionId, userId)
+    if (!stateName) {
       return res.status(404).json({
         success: false,
         message: 'Session not found.',
       });
     }
-
-    const stateName = result.rows[0].state_name as string
-
-    // Store in cache
-    sessionCache.set(sessionId, {
-      stateName,
-      expiresAt: Date.now() + SESSION_CACHE_TTL_MS,
-    })
 
     return res.json({
       success: true,

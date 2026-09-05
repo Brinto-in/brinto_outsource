@@ -1,5 +1,4 @@
 import express from 'express'
-import db from '../lib/db.js'
 import { defaultAdmitCards } from './job_admit_card_section_data.js'
 import { defaultAnswerKeys } from './job_answer_key_section_data.js'
 import { defaultCutOffs } from './job_cut_off_section_data.js'
@@ -9,7 +8,7 @@ import { quickCategories } from './quick_categories_data.js'
 import { filterOptions, scholarships } from './scholarship_section_data.js'
 import { states } from './states_data.js'
 import { spotlights, type SpotlightType } from './spotlight_data.js'
-import { loadSessionState, StateRequest } from '../middleware/state.js'
+import { getSessionState, loadSessionState, StateRequest } from '../middleware/state.js'
 
 const router = express.Router()
 
@@ -91,15 +90,8 @@ router.get('/home_config', async (req, res) => {
 			return
 		}
 
-		const result = await db.execute({
-			sql: `SELECT state_name
-				FROM user_states
-				WHERE session_id = ?
-				LIMIT 1`,
-			args: [sessionId],
-		})
-		const state = result.rows[0]?.state_name
-		if (typeof state !== 'string' || !state.trim()) {
+		const state = await getSessionState(sessionId)
+		if (!state) {
 			res.status(404).json({
 				success: false,
 				message: 'Session not found.',
@@ -107,10 +99,10 @@ router.get('/home_config', async (req, res) => {
 			return
 		}
 
-		if (state.trim().toLowerCase() === 'odisha') {
+		if (state === 'odisha') {
 			res.json(popularServices.map((service) => ({
 				...service,
-				state: state.trim(),
+				state,
 			})))
 			return
 		}

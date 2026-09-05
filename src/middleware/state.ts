@@ -14,6 +14,52 @@ interface CacheEntry {
 const sessionStateCache = new Map<string, CacheEntry>()
 const CACHE_TTL_MS = 60 * 60 * 1000 // 1 hour
 
+const getCacheKey = (sessionId: string, userId?: string | null) =>
+	`${sessionId}:${userId ?? 'any'}`
+
+export const getSessionState = async (sessionId: string, userId?: string | null) => {
+	const cacheKey = getCacheKey(sessionId, userId)
+	const cached = sessionStateCache.get(cacheKey)
+	if (cached && cached.expiresAt > Date.now()) {
+		return cached.state
+	}
+
+	const ownershipClause = userId === undefined
+		? ''
+		: 'AND ((user_id = ?) OR (user_id IS NULL AND ? IS NULL))'
+	const args = userId === undefined ? [sessionId] : [sessionId, userId, userId]
+
+	const result = await db.execute({
+		sql: `SELECT state_name
+			FROM user_states
+			WHERE session_id = ?
+			${ownershipClause}
+			LIMIT 1`,
+		args,
+	})
+
+	const stateName = result.rows[0]?.state_name
+	if (typeof stateName !== 'string' || !stateName.trim()) {
+		return null
+	}
+
+	const normalizedState = stateName.trim().toLowerCase()
+	sessionStateCache.set(cacheKey, {
+		state: normalizedState,
+		expiresAt: Date.now() + CACHE_TTL_MS,
+	})
+
+	return normalizedState
+}
+
+export const invalidateSessionState = (sessionId: string) => {
+	for (const key of sessionStateCache.keys()) {
+		if (key.startsWith(`${sessionId}:`)) {
+			sessionStateCache.delete(key)
+		}
+	}
+}
+
 // Clean up expired cache entries periodically
 setInterval(() => {
 	const now = Date.now()
@@ -31,39 +77,15 @@ export const loadSessionState = async (req: StateRequest, res: Response, next: N
 		return next()
 	}
 
-	// Check cache first
-	const cached = sessionStateCache.get(sessionId)
-	if (cached && cached.expiresAt > Date.now()) {
-		req.sessionState = cached.state
-		return next()
-	}
-
-	// Cache miss or expired, query database
-	const result = await db.execute({
-		sql: `SELECT state_name
-			FROM user_states
-			WHERE session_id = ?
-			LIMIT 1`,
-		args: [sessionId],
-	})
-
-	const stateName = result.rows[0]?.state_name
-	if (typeof stateName !== 'string' || !stateName.trim()) {
+	const state = await getSessionState(sessionId)
+	if (!state) {
 		return res.status(404).json({
 			success: false,
 			message: 'Session not found.',
 		})
 	}
 
-	const normalizedState = stateName.trim().toLowerCase()
-	
-	// Store in cache
-	sessionStateCache.set(sessionId, {
-		state: normalizedState,
-		expiresAt: Date.now() + CACHE_TTL_MS,
-	})
-
-	req.sessionState = normalizedState
+	req.sessionState = state
 	next()
 }
 
