@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto';
 import jwt from 'jsonwebtoken';
 import db from '../lib/db.js';
 import { verifyToken, optionalVerifyToken, AuthRequest, JWT_SECRET } from '../middleware/auth.js';
-import { getSessionState, invalidateSessionState } from '../middleware/state.js';
+import { getSessionState } from '../middleware/state.js';
 
 const router = Router();
 
@@ -69,9 +69,6 @@ router.post('/state-session', optionalVerifyToken, async (req: AuthRequest, res)
           `,
           args: [state_name.trim(), sessionIdHeader],
         });
-
-        // Invalidate cache for this session
-        invalidateSessionState(sessionIdHeader)
 
         return res.json({
           success: true,
