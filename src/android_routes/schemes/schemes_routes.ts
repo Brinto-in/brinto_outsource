@@ -43,6 +43,7 @@ router.get('/', (req: StateRequest, res: Response) => {
 
 		// State is resolved by middleware from the session_id header.
 		const stateFilter = req.sessionState
+		console.log('State Filter:', stateFilter)
 
 		// Return empty array if no state filter provided
 		if (!stateFilter) {
