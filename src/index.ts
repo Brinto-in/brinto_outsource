@@ -155,6 +155,64 @@ app.post('/api/get-upload-url', async (req, res) => {
   }
 });
 
+app.post('/api/get-blog-upload-url', async (req, res) => {
+  try {
+    const {
+      fileName,
+      contentType = 'application/pdf',
+    } = req.body;
+
+    if (
+      !process.env.CF_ACCOUNT_ID ||
+      !process.env.R2_ACCESS_KEY_ID ||
+      !process.env.R2_SECRET_ACCESS_KEY ||
+      !process.env.R2_BUCKET_NAME
+    ) {
+      console.error('R2 environment variables are not configured.');
+
+      return res.status(500).json({
+        success: false,
+        message: 'R2 upload service is not configured.',
+      });
+    }
+
+    if (!fileName) {
+      return res.status(400).json({
+        success: false,
+        message: 'fileName is required.',
+      });
+    }
+
+    const key = `blog/${fileName}-${Date.now()}`;
+
+    const command = new PutObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME,
+      Key: key,
+      ContentType: contentType,
+    });
+
+    const uploadURL = await getSignedUrl(r2, command, {
+      expiresIn: 600,
+    });
+
+    return res.json({
+      success: true,
+      uploadURL,
+      key,
+    });
+  } catch (error: any) {
+    console.error(
+      'Error generating blog R2 upload URL:',
+      error?.message || error
+    );
+
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to generate blog upload URL.',
+    });
+  }
+});
+
 // Home
 app.get('/', (req, res) => {
   res.type('html').send(`
