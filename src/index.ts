@@ -183,7 +183,7 @@ app.post('/api/get-blog-upload-url', async (req, res) => {
       });
     }
 
-    const key = `blog/${fileName}-${Date.now()}`;
+    const key = `blogs/${fileName}-${Date.now()}`;
 
     const command = new PutObjectCommand({
       Bucket: process.env.R2_BUCKET_NAME,
