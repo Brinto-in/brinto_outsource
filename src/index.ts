@@ -185,7 +185,8 @@ app.post('/api/get-blog-upload-url', async (req, res) => {
 
     const extension = path.extname(fileName);
     const baseName = path.basename(fileName, extension);
-    const key = `blogs/${baseName}-${Date.now()}${extension}`;
+    const normalizedBaseName = baseName.replace(/\s+/g, '-');
+    const key = `blogs/${normalizedBaseName}-${Date.now()}${extension}`;
 
     const command = new PutObjectCommand({
       Bucket: process.env.R2_BUCKET_NAME,
